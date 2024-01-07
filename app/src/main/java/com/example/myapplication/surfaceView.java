@@ -1,5 +1,8 @@
 package com.example.myapplication;
 
+import static com.example.myapplication.AppConstant.startingPositionX;
+import static com.example.myapplication.AppConstant.startingPositionY;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +20,8 @@ public class surfaceView extends SurfaceView implements Runnable {
     Context context;
     SurfaceHolder holder;
     Bitmap bitmap;
+    Bitmap figure1;
+    Bitmap figure2;
     boolean init = true;
 
     public surfaceView(Context context) {
@@ -31,6 +36,8 @@ public class surfaceView extends SurfaceView implements Runnable {
     public void run() {
 
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img_1);
+        figure1 = BitmapFactory.decodeResource(getResources(), R.drawable.figure1);
+        figure2 = BitmapFactory.decodeResource(getResources(), R.drawable.figure2);
 
 
         while (threadRunning) { // כל המשחק ממשיך לפעול
@@ -46,12 +53,28 @@ public class surfaceView extends SurfaceView implements Runnable {
                     synchronized (this.getHolder()) {
 
                         if(init) {
-                           bitmap = Bitmap.createScaledBitmap(bitmap,c.getWidth(),c.getHeight(),false);
-                           this.setBackground(bitmap);
-                           init = false;
+
+                            AppConstant.IMAGE_WIDTH = c.getWidth()/7;
+                            AppConstant.IMAGE_HEIGHT = c.getHeight()/7;
+                            startingPositionX = c.getWidth()/20;
+                            startingPositionY = c.getHeight() - c.getHeight()/5;
+                            bitmap = Bitmap.createScaledBitmap(bitmap,c.getWidth(),c.getHeight(),false);
+                         //  this.setBackground(bitmap);
+                            figure1 = Bitmap.createScaledBitmap(figure1, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
+
+                         init = false;
                         }
-                        c.drawBitmap(bitmap, 0,0, null);
+                  //      c.drawBitmap(bitmap, 0,0, null);
+                     //   c.drawBitmap(figure1, 0,0, null);
                         //כאן יהיהה המשחק
+
+                        c.drawBitmap(bitmap,0,0,null);
+
+                        c.drawBitmap(figure1, startingPositionX , startingPositionY, null);
+
+
+                        SystemClock.sleep(200);
+
 
                     }
 
