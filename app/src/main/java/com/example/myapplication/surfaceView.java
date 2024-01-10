@@ -38,7 +38,9 @@ public class surfaceView extends SurfaceView implements Runnable {
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img_1);
         figure1 = BitmapFactory.decodeResource(getResources(), R.drawable.figure1);
         figure2 = BitmapFactory.decodeResource(getResources(), R.drawable.figure2);
-
+        figure3 = BitmapFactory.decodeResource(getResources(), R.drawable.figure3);
+        figure4 = BitmapFactory.decodeResource(getResources(), R.drawable.figure4);
+        figure5 = BitmapFactory.decodeResource(getResources(), R.drawable.figure5);
 
         while (threadRunning) { // כל המשחק ממשיך לפעול
 
@@ -54,8 +56,8 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                         if(init) {
 
-                            AppConstant.IMAGE_WIDTH = c.getWidth()/7;
-                            AppConstant.IMAGE_HEIGHT = c.getHeight()/7;
+                            AppConstant.IMAGE_WIDTH = c.getWidth()/6;
+                            AppConstant.IMAGE_HEIGHT = c.getHeight()/6;
                             startingPositionX = c.getWidth()/20;
                             startingPositionY = c.getHeight() - c.getHeight()/5;
                             bitmap = Bitmap.createScaledBitmap(bitmap,c.getWidth(),c.getHeight(),false);
