@@ -7,6 +7,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.SystemClock;
 import android.util.Log;
@@ -22,7 +24,11 @@ public class surfaceView extends SurfaceView implements Runnable {
     Bitmap bitmap;
     Bitmap figure1;
     Bitmap figure2;
+    Bitmap figure3;
+    Bitmap figure4;
+    Bitmap figure5;
     boolean init = true;
+    private PowerBar powerBar;
 
     public surfaceView(Context context) {
         super(context);
@@ -41,7 +47,8 @@ public class surfaceView extends SurfaceView implements Runnable {
         figure3 = BitmapFactory.decodeResource(getResources(), R.drawable.figure3);
         figure4 = BitmapFactory.decodeResource(getResources(), R.drawable.figure4);
         figure5 = BitmapFactory.decodeResource(getResources(), R.drawable.figure5);
-
+        this.powerBar = new PowerBar();
+        this.powerBar.startLoading();
         while (threadRunning) { // כל המשחק ממשיך לפעול
 
 
@@ -60,7 +67,7 @@ public class surfaceView extends SurfaceView implements Runnable {
                             AppConstant.IMAGE_HEIGHT = c.getHeight()/6;
                             startingPositionX = c.getWidth()/20;
                             startingPositionY = c.getHeight() - c.getHeight()/5;
-                            bitmap = Bitmap.createScaledBitmap(bitmap,c.getWidth(),c.getHeight(),false);
+                            bitmap = Bitmap.createScaledBitmap(bitmap,c.getWidth(),c.getHeight() - c.getHeight()/10,false);
                          //  this.setBackground(bitmap);
                             figure1 = Bitmap.createScaledBitmap(figure1, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
 
@@ -74,7 +81,7 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                         c.drawBitmap(figure1, startingPositionX , startingPositionY, null);
 
-
+                        drawPower(c);
                         SystemClock.sleep(200);
 
 
@@ -90,6 +97,34 @@ public class surfaceView extends SurfaceView implements Runnable {
                 }
             }
         }
+    }
+
+    private void drawPower(Canvas c)
+    {
+        float x = 0;
+        float y = c.getHeight() - c.getHeight()/10;
+        float deltaX = c.getWidth()/10;
+        float deltaY =deltaX;
+
+
+        for (int i = 0; i < powerBar.getLoad() ; i++) {
+            Paint p = new Paint();
+            p.setColor(Color.YELLOW);
+            c.drawRect(x, y, x+deltaX, y+deltaY, p);
+            x+=deltaX;
+        }
+        for (int i = powerBar.getLoad(); i <AppConstant.MAX_NUM_OF_BARS ; i++) {
+            Paint p = new Paint();
+            p.setColor(Color.RED);
+            c.drawRect(x, y, x+deltaX, y+deltaY, p);
+            x+=deltaX;
+        }
+
+
+
+
+
+
     }
 
     private void setBackground(Bitmap bitmap) {
