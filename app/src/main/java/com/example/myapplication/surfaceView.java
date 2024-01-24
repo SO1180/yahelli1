@@ -67,7 +67,7 @@ public class surfaceView extends SurfaceView implements Runnable {
                             AppConstant.IMAGE_HEIGHT = c.getHeight()/6;
                             startingPositionX = c.getWidth()/20;
                             startingPositionY = c.getHeight() - c.getHeight()/5;
-                            bitmap = Bitmap.createScaledBitmap(bitmap,c.getWidth(),c.getHeight() - c.getHeight()/10,false);
+                            bitmap = Bitmap.createScaledBitmap(bitmap,c.getWidth(),c.getHeight() - c.getHeight()/4,false);
                          //  this.setBackground(bitmap);
                             figure1 = Bitmap.createScaledBitmap(figure1, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
 
@@ -79,9 +79,10 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                         c.drawBitmap(bitmap,0,0,null);
 
-                        c.drawBitmap(figure1, startingPositionX , startingPositionY, null);
+                        // c.drawBitmap(figure1, startingPositionX , startingPositionY, null);
 
-                        drawPower(c);
+                        drawPowerBar(c);
+                        drawPowers(c);
                         SystemClock.sleep(200);
 
 
@@ -99,35 +100,53 @@ public class surfaceView extends SurfaceView implements Runnable {
         }
     }
 
-    private void drawPower(Canvas c)
+    private void drawPowerBar(Canvas c)
     {
-        float x = 0;
-        float y = c.getHeight() - c.getHeight()/10;
-        float deltaX = c.getWidth()/10;
-        float deltaY =deltaX;
+        int x = 0;
+        int y = c.getHeight() - c.getHeight()/12;
+        int deltaX = c.getWidth()/10;
+        int deltaY =deltaX;
+
+        Paint p = new Paint();
+        Paint drawPaint = new Paint();
+        drawPaint.setTextAlign(Paint.Align.CENTER);
+        drawPaint.setTextSize(40);  //set text size
+
 
 
         for (int i = 0; i < powerBar.getLoad() ; i++) {
-            Paint p = new Paint();
-            p.setColor(Color.YELLOW);
-            c.drawRect(x, y, x+deltaX, y+deltaY, p);
+            p.setColor(getResources().getColor(R.color.purple_200));
+            Rect rect = new Rect(x, y, x+deltaX, y+deltaY);
+            c.drawRect(rect, p);
+            c.drawText("" + (i+1), rect.centerX(),rect.centerY() + 10,drawPaint);
             x+=deltaX;
         }
         for (int i = powerBar.getLoad(); i <AppConstant.MAX_NUM_OF_BARS ; i++) {
-            Paint p = new Paint();
-            p.setColor(Color.RED);
+            p.setColor(getResources().getColor(R.color.purple));
             c.drawRect(x, y, x+deltaX, y+deltaY, p);
             x+=deltaX;
         }
-
-
-
-
-
-
     }
 
-    private void setBackground(Bitmap bitmap) {
+
+    private void drawPowers(Canvas c)
+    {
+        float deltaX = (c.getWidth()/12)*2;
+
+        float x = deltaX;
+        float y = c.getHeight() - (c.getHeight()/12)*3;
+     //   float y2 = y - c.getHeight()/10;
+        float deltaY =deltaX*1.6f;
+
+        for (int i = 0; i < AppConstant.NUM_OF_POWERS; i++)
+        {
+            Paint p = new Paint();
+            p.setColor(getResources().getColor(R.color.powersBar));
+            c.drawRect(x, y, x+deltaX, y+deltaY, p);
+            x+=deltaX*1.1f ;
+
+        }
     }
+
 
 }

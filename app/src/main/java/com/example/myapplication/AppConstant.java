@@ -7,7 +7,8 @@ public class AppConstant {
     public static float  startingPositionX;
     public static float startingPositionY;
     public static int SPEEDX = 10;
-    public static int TIME_TO_SLEEP =500;
+    public static int TIME_TO_SLEEP = 900;
     public static int MAX_NUM_OF_BARS = 10;
+    public static int NUM_OF_POWERS = 4;
 
 }
