@@ -27,13 +27,40 @@ public class surfaceView extends SurfaceView implements Runnable {
     Bitmap figure3;
     Bitmap figure4;
     Bitmap figure5;
+    Bitmap powerArrows;
+    Bitmap powerBoomb;
+    Bitmap powerRocket;
+    Bitmap powerSnowball;
+    Bitmap powerFireball;
+    Bitmap powerBoomerang;
+    Bitmap powerRanDanker;
+    Bitmap powerRock;
+    Bitmap powerSnowflake;
+    Bitmap powerWoodenlog;
+
+
+
     boolean init = true;
     private PowerBar powerBar;
+
 
     public surfaceView(Context context) {
         super(context);
         this.context = context;
         holder = getHolder();
+
+
+
+        temporaryConfiguration();
+
+    }
+
+    private void temporaryConfiguration() {
+
+        AppConstant.currPowers[0] = new Powers(10,4,powerRocket);
+        AppConstant.currPowers[1] = new Powers(25,5,powerSnowball);
+        AppConstant.currPowers[2] = new Powers(15,3,powerBoomb);
+        AppConstant.currPowers[3] = new Powers(10,2,powerArrows);
 
     }
 
@@ -47,6 +74,19 @@ public class surfaceView extends SurfaceView implements Runnable {
         figure3 = BitmapFactory.decodeResource(getResources(), R.drawable.figure3);
         figure4 = BitmapFactory.decodeResource(getResources(), R.drawable.figure4);
         figure5 = BitmapFactory.decodeResource(getResources(), R.drawable.figure5);
+
+        powerArrows = BitmapFactory.decodeResource(getResources(), R.drawable.arrows);
+        powerRocket = BitmapFactory.decodeResource(getResources(), R.drawable.rocket);
+        powerBoomb = BitmapFactory.decodeResource(getResources(), R.drawable.boomb);
+        powerSnowball = BitmapFactory.decodeResource(getResources(), R.drawable.snowball);
+        powerFireball = BitmapFactory.decodeResource(getResources(), R.drawable.fireball);
+        powerBoomerang = BitmapFactory.decodeResource(getResources(), R.drawable.boomerang);
+        powerRanDanker = BitmapFactory.decodeResource(getResources(), R.drawable.randanker);
+        powerRock = BitmapFactory.decodeResource(getResources(), R.drawable.rock);
+        powerSnowflake = BitmapFactory.decodeResource(getResources(), R.drawable.snowflake);
+        powerWoodenlog = BitmapFactory.decodeResource(getResources(), R.drawable.woodenlog);
+
+
         this.powerBar = new PowerBar();
         this.powerBar.startLoading();
         while (threadRunning) { // כל המשחק ממשיך לפעול
@@ -68,7 +108,6 @@ public class surfaceView extends SurfaceView implements Runnable {
                             startingPositionX = c.getWidth()/20;
                             startingPositionY = c.getHeight() - c.getHeight()/5;
                             bitmap = Bitmap.createScaledBitmap(bitmap,c.getWidth(),c.getHeight() - c.getHeight()/4,false);
-                         //  this.setBackground(bitmap);
                             figure1 = Bitmap.createScaledBitmap(figure1, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
 
                          init = false;
@@ -132,10 +171,8 @@ public class surfaceView extends SurfaceView implements Runnable {
     private void drawPowers(Canvas c)
     {
         float deltaX = (c.getWidth()/12)*2;
-
         float x = deltaX;
         float y = c.getHeight() - (c.getHeight()/12)*3;
-     //   float y2 = y - c.getHeight()/10;
         float deltaY =deltaX*1.6f;
 
         for (int i = 0; i < AppConstant.NUM_OF_POWERS; i++)
@@ -144,8 +181,24 @@ public class surfaceView extends SurfaceView implements Runnable {
             p.setColor(getResources().getColor(R.color.powersBar));
             c.drawRect(x, y, x+deltaX, y+deltaY, p);
             x+=deltaX*1.1f ;
+        }
+
+        deltaX = (c.getWidth()/12)*2 + 10;
+        x = deltaX;
+        y = c.getHeight() - (c.getHeight()/12)*3 + 10;
+        deltaY =deltaX*1.25f;
+
+        for (int i = 0; i < AppConstant.NUM_OF_POWERS; i++)
+        {
+            Paint p2 = new Paint();
+            p2.setColor(getResources().getColor(R.color.white));
+            c.drawRect(x, y, x+deltaX, y+deltaY, p2);
+            x+=deltaX*1.15f ;
+
+            c.drawBitmap(AppConstant.currPowers[i].getBitmap(), x, y, null);
 
         }
+
     }
 
 
