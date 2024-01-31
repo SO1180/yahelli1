@@ -22,6 +22,7 @@ public class surfaceView extends SurfaceView implements Runnable {
     Context context;
     SurfaceHolder holder;
     Bitmap bitmap;
+    Bitmap bitmap2;
     Bitmap figure1;
     Bitmap figure2;
     Bitmap figure3;
@@ -68,7 +69,8 @@ public class surfaceView extends SurfaceView implements Runnable {
     @Override
     public void run() {
 
-        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img_1);
+        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img);
+        bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.img_1);
         figure1 = BitmapFactory.decodeResource(getResources(), R.drawable.figure1);
         figure2 = BitmapFactory.decodeResource(getResources(), R.drawable.figure2);
         figure3 = BitmapFactory.decodeResource(getResources(), R.drawable.figure3);
@@ -108,6 +110,7 @@ public class surfaceView extends SurfaceView implements Runnable {
                             startingPositionX = c.getWidth()/20;
                             startingPositionY = c.getHeight() - c.getHeight()/5;
                             bitmap = Bitmap.createScaledBitmap(bitmap,c.getWidth(),c.getHeight() - c.getHeight()/4,false);
+                            bitmap2 = Bitmap.createScaledBitmap(bitmap2,c.getWidth(),c.getHeight() - (int)((c.getHeight()/3.0)*4),false);
                             figure1 = Bitmap.createScaledBitmap(figure1, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
 
                          init = false;
@@ -117,6 +120,7 @@ public class surfaceView extends SurfaceView implements Runnable {
                         //כאן יהיהה המשחק
 
                         c.drawBitmap(bitmap,0,0,null);
+                        c.drawBitmap(bitmap2,0,c.getHeight()-c.getHeight()/4,null);
 
                         // c.drawBitmap(figure1, startingPositionX , startingPositionY, null);
 
@@ -172,8 +176,8 @@ public class surfaceView extends SurfaceView implements Runnable {
     {
         float deltaX = (c.getWidth()/12)*2;
         float x = deltaX;
-        float y = c.getHeight() - (c.getHeight()/12)*3;
-        float deltaY =deltaX*1.6f;
+        float y = c.getHeight() - (c.getHeight()/33)*8;
+        float deltaY =deltaX*1.65f;
 
         for (int i = 0; i < AppConstant.NUM_OF_POWERS; i++)
         {
