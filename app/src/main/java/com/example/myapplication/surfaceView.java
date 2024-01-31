@@ -110,6 +110,8 @@ public class surfaceView extends SurfaceView implements Runnable {
                             AppConstant.IMAGE_WIDTH = c.getWidth()/6;
                             AppConstant.IMAGE_HEIGHT = c.getHeight()/6;
                             startingPositionX = c.getWidth()/20;
+
+
                             startingPositionY = c.getHeight() - c.getHeight()/5;
                             bitmap = Bitmap.createScaledBitmap(bitmap,c.getWidth(),c.getHeight() - c.getHeight()/4,false);
                             bitmap2 = Bitmap.createScaledBitmap(bitmap2,c.getWidth(),c.getHeight() - (int)((c.getHeight()/3.0)*4),false);
