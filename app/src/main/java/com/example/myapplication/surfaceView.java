@@ -105,6 +105,8 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                         if(init) {
 
+
+
                             AppConstant.IMAGE_WIDTH = c.getWidth()/6;
                             AppConstant.IMAGE_HEIGHT = c.getHeight()/6;
                             startingPositionX = c.getWidth()/20;
