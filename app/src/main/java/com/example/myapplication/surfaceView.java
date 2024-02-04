@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import static com.example.myapplication.AppConstant.currPowers;
 import static com.example.myapplication.AppConstant.startingPositionX;
 import static com.example.myapplication.AppConstant.startingPositionY;
 
@@ -38,6 +39,7 @@ public class surfaceView extends SurfaceView implements Runnable {
     Bitmap powerRock;
     Bitmap powerSnowflake;
     Bitmap powerWoodenlog;
+
 
 
 
@@ -105,28 +107,28 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                         if(init) {
 
-
-
                             AppConstant.IMAGE_WIDTH = c.getWidth()/6;
-                            AppConstant.IMAGE_HEIGHT = c.getHeight()/6;
-                            startingPositionX = c.getWidth()/20;
-
-
-                            startingPositionY = c.getHeight() - c.getHeight()/5;
+                            AppConstant.IMAGE_HEIGHT = c.getHeight()/7;
+                            startingPositionX = bitmap.getWidth()/20;
+                            startingPositionY = bitmap.getHeight() - bitmap.getHeight()/6;
                             bitmap = Bitmap.createScaledBitmap(bitmap,c.getWidth(),c.getHeight() - c.getHeight()/4,false);
                             bitmap2 = Bitmap.createScaledBitmap(bitmap2,c.getWidth(),c.getHeight() - (int)((c.getHeight()/3.0)*4),false);
                             figure1 = Bitmap.createScaledBitmap(figure1, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
 
                          init = false;
                         }
-                  //      c.drawBitmap(bitmap, 0,0, null);
-                     //   c.drawBitmap(figure1, 0,0, null);
                         //כאן יהיהה המשחק
 
                         c.drawBitmap(bitmap,0,0,null);
                         c.drawBitmap(bitmap2,0,c.getHeight()-c.getHeight()/4,null);
+                        c.drawBitmap(figure1, startingPositionX , startingPositionY, null);
 
-                        // c.drawBitmap(figure1, startingPositionX , startingPositionY, null);
+                        float deltax = 10;
+                        startingPositionX += deltax;
+
+                        if (startingPositionX < 0 || startingPositionX > c.getWidth() - figure1.getWidth())
+                            deltax = -deltax;
+
 
                         drawPowerBar(c);
                         drawPowers(c);
@@ -178,7 +180,7 @@ public class surfaceView extends SurfaceView implements Runnable {
 
     private void drawPowers(Canvas c)
     {
-        float deltaX = (c.getWidth()/12)*2;
+        float deltaX = (c.getWidth()/13)*2;
         float x = deltaX;
         float y = c.getHeight() - (c.getHeight()/33)*8;
         float deltaY =deltaX*1.65f;
@@ -191,19 +193,39 @@ public class surfaceView extends SurfaceView implements Runnable {
             x+=deltaX*1.1f ;
         }
 
-        deltaX = (c.getWidth()/12)*2 + 10;
+        deltaX = (c.getWidth()/13)*2;
         x = deltaX;
-        y = c.getHeight() - (c.getHeight()/12)*3 + 10;
-        deltaY =deltaX*1.25f;
+        y = c.getHeight() - (c.getHeight()/33)*8;
+        deltaY =deltaX*1.3f;
+
+        float powersRight = (c.getWidth()/13)*2;
+        float powersLeft = c.getHeight() - (c.getHeight()/33)*8;
+
+
+
+        Powers[] currPowers = AppConstant.currPowers;
+
+        Powers pRocket = new Powers(110, 7, powerRocket);
+        currPowers[0] = pRocket;
+        Powers pRock = new Powers(54, 3, powerRock);
+        currPowers[1] = pRock;
+        Powers pFireball = new Powers(89, 4, powerFireball);
+        currPowers[2] = pFireball;
+        Powers pArrows = new Powers(75, 3, powerArrows);
+        currPowers[3] = pArrows;
+
+
 
         for (int i = 0; i < AppConstant.NUM_OF_POWERS; i++)
         {
             Paint p2 = new Paint();
             p2.setColor(getResources().getColor(R.color.white));
-            c.drawRect(x, y, x+deltaX, y+deltaY, p2);
-            x+=deltaX*1.15f ;
+            c.drawRect(x + 15, y + 15, x+deltaX - 15, y+deltaY + 15, p2);
 
-            c.drawBitmap(AppConstant.currPowers[i].getBitmap(), x, y, null);
+            Bitmap b = Bitmap.createScaledBitmap(AppConstant.currPowers[i].getBitmap(),(int)deltaX,(int)deltaY,false);
+            c.drawBitmap(b, x+15, y + 15, null);
+
+            x+=deltaX*1.1f ;
 
         }
 

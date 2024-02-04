@@ -22,6 +22,8 @@ public class Powers {
         this.bitmap = bitmap;
     }
 
+
+
     public int getDamage() {
         return damage;
     }
