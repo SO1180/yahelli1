@@ -4,6 +4,7 @@ import static com.example.myapplication.AppConstant.currPowers;
 import static com.example.myapplication.AppConstant.startingPositionX;
 import static com.example.myapplication.AppConstant.startingPositionY;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,10 +12,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 public class surfaceView extends SurfaceView implements Runnable {
 
@@ -40,6 +46,7 @@ public class surfaceView extends SurfaceView implements Runnable {
     Bitmap powerSnowflake;
     Bitmap powerWoodenlog;
 
+    Paint hilaPaint = new Paint();
 
 
 
@@ -70,6 +77,11 @@ public class surfaceView extends SurfaceView implements Runnable {
 
     @Override
     public void run() {
+        hilaPaint.setColor(getResources().getColor(R.color.hila));
+        hilaPaint.setStyle(Paint.Style.STROKE);
+        hilaPaint.setStrokeWidth(4);
+
+
 
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img);
         bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.img_1);
@@ -90,6 +102,7 @@ public class surfaceView extends SurfaceView implements Runnable {
         powerSnowflake = BitmapFactory.decodeResource(getResources(), R.drawable.snowflake);
         powerWoodenlog = BitmapFactory.decodeResource(getResources(), R.drawable.woodenlog);
 
+        float deltax = 10;
 
         this.powerBar = new PowerBar();
         this.powerBar.startLoading();
@@ -123,10 +136,13 @@ public class surfaceView extends SurfaceView implements Runnable {
                         c.drawBitmap(bitmap2,0,c.getHeight()-c.getHeight()/4,null);
                         c.drawBitmap(figure1, startingPositionX , startingPositionY, null);
 
-                        float deltax = 10;
+
+
+                        c.drawCircle(startingPositionX+figure1.getWidth()/2, startingPositionY+figure1.getHeight()/2,figure1.getWidth()*1.25f,hilaPaint );
+
                         startingPositionX += deltax;
 
-                        if (startingPositionX < 0 || startingPositionX > c.getWidth() - figure1.getWidth())
+                        if (startingPositionX < 0 || startingPositionX + figure1.getWidth() > c.getWidth() - c.getWidth()/6)
                             deltax = -deltax;
 
 
@@ -148,6 +164,8 @@ public class surfaceView extends SurfaceView implements Runnable {
             }
         }
     }
+
+
 
     private void drawPowerBar(Canvas c)
     {
@@ -222,13 +240,35 @@ public class surfaceView extends SurfaceView implements Runnable {
             p2.setColor(getResources().getColor(R.color.white));
             c.drawRect(x + 15, y + 15, x+deltaX - 15, y+deltaY + 15, p2);
 
-            Bitmap b = Bitmap.createScaledBitmap(AppConstant.currPowers[i].getBitmap(),(int)deltaX,(int)deltaY,false);
-            c.drawBitmap(b, x+15, y + 15, null);
+            Bitmap b = Bitmap.createScaledBitmap(AppConstant.currPowers[i].getBitmap(),(int)deltaX - 25,(int)deltaY,false);
+            c.drawBitmap(b, x+ 15, y + 15, null);
 
             x+=deltaX*1.1f ;
 
         }
 
+    }
+
+    float x1;
+    float y1;
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
+
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            if(x1 > x + 15)
+        }
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                x = event.getX();
+                y = event.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+            case MotionEvent.ACTION_MOVE:
+                break;
+        }
     }
 
 
