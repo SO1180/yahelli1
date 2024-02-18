@@ -22,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -131,6 +132,8 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                             AppConstant.IMAGE_WIDTH = c.getWidth() / 6;
                             AppConstant.IMAGE_HEIGHT = c.getHeight() / 7;
+                            float cHigh = c.getHeight();
+                            float cWidth = c.getWidth();
 
                             POWERX_DELTA_X= (c.getWidth() / 13) * 2;
 
@@ -256,7 +259,13 @@ public class surfaceView extends SurfaceView implements Runnable {
             Paint p = new Paint();
             p.setColor(getResources().getColor(R.color.powersBar));
             c.drawRect(powerX[i], y, powerX[i] + deltaX, y + deltaY, p);
-            //  x+=deltaX*1.1f ;
+
+
+            // לעשות את המספרים של הכוחות (טעינה) todo
+
+            c.drawText(currPowers[i].reloading , x , y, p);
+
+
         }
 
         deltaX = (c.getWidth() / 13) * 2;
@@ -305,6 +314,7 @@ public class surfaceView extends SurfaceView implements Runnable {
         float x1;
         float y1;
         float x, y;
+        float d = 0;
 
 
         switch (event.getAction()) {
@@ -312,8 +322,14 @@ public class surfaceView extends SurfaceView implements Runnable {
             case MotionEvent.ACTION_UP:
                 clickCounter++;
 
+                // todo לכתוב בצד אחד שבחרת באותו כוח (מה שמיכל אמרה לשים בצד)
 
-                 x= event.getX();
+                if(clickCounter == 1){
+                    x1 = event.getX();
+                    y1 = event.getY();
+                }
+
+                 x = event.getX();
                  y = event.getY();
 
                  // incase click is odd ->  we use Array of X
@@ -323,16 +339,27 @@ public class surfaceView extends SurfaceView implements Runnable {
                     if(x > powerX[i] && x < powerX[i] +POWERX_DELTA_X && y > powerX[i] && y < powerX[i] +POWERX_DELTA_Y )
                     {
                         index = i;
+
                     }
-
-
+                    if(currPowers[index].reloading < powerBar.getLoad())
+                    {
+                       Toast.makeText(this, "You don't have enough powerLoad for this power", Toast.LENGTH_SHORT).show();
+                    }
                 }
+
                 // KEEP IT SIMPLE!
 
                 if(index!=-1)
                     powerIndexChoice = index;
                     // did not select a power
 
+                if(clickCounter == 2 )
+                {
+                    startingPositionY = y1;
+                    startingPositionX = x1;
+                    d = Math.sqrt((x1 - x)^2 + (y1 - y)^2);
+                    y1 += 10;
+                }
 
                 break;
 
