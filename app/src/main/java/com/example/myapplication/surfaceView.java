@@ -326,7 +326,7 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                 if(clickCounter == 1){
                     x1 = event.getX();
-                    y1 = event.getY();
+                    y1 = event.getY(); //
                 }
 
                  x = event.getX();
