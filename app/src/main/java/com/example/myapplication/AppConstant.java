@@ -2,6 +2,8 @@ package com.example.myapplication;
 
 public class AppConstant {
 
+    public static  float POWERS_Y;
+    public static  float MIDDLE_X;
     public static  int IMAGE_WIDTH;
     public static  int IMAGE_HEIGHT;
     public static float  startingPositionX;
@@ -12,7 +14,7 @@ public class AppConstant {
     public static int NUM_OF_POWERS = 4;
 
     public static float POWERX_DELTA_X;
-    public static float POWERX_DELTA_Y;
+    public static float POWERY_DELTA_Y;
 
     public static Powers[] AllPowers;
     public static Powers[] currPowers = new Powers[4];

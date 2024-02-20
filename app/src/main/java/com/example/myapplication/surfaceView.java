@@ -1,20 +1,19 @@
 package com.example.myapplication;
 
+import static com.example.myapplication.AppConstant.AllPowers;
+import static com.example.myapplication.AppConstant.POWERS_Y;
 import static com.example.myapplication.AppConstant.POWERX_DELTA_X;
-import static com.example.myapplication.AppConstant.POWERX_DELTA_Y;
+import static com.example.myapplication.AppConstant.POWERY_DELTA_Y;
 import static com.example.myapplication.AppConstant.currPowers;
 import static com.example.myapplication.AppConstant.startingPositionX;
 import static com.example.myapplication.AppConstant.startingPositionY;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.util.Log;
@@ -22,9 +21,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -55,16 +51,21 @@ public class surfaceView extends SurfaceView implements Runnable {
     TextView textView;
 
     Paint hilaPaint = new Paint();
-
+    float ratio;
+    float x, y;
+    int done = 0;
     int powerIndexChoice = 0;
 
 
     private float[] powerX = new float[AppConstant.NUM_OF_POWERS];
+    private float[] powerY = new float[AppConstant.NUM_OF_POWERS];
 
 
     boolean init = true;
     private PowerBar powerBar;
+    private float endPositionX=0;
 
+    private float endPositionY=0;
 
     public surfaceView(Context context) {
         super(context);
@@ -132,12 +133,17 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                             AppConstant.IMAGE_WIDTH = c.getWidth() / 6;
                             AppConstant.IMAGE_HEIGHT = c.getHeight() / 7;
-                            float cHigh = c.getHeight();
-                            float cWidth = c.getWidth();
 
-                            POWERX_DELTA_X= (c.getWidth() / 13) * 2;
+                            AppConstant.MIDDLE_X = c.getWidth()/2;
+                            AppConstant.POWERS_Y = c.getHeight() - (c.getHeight() / 33) * 8;
+
+                            AppConstant.POWERX_DELTA_X= (c.getWidth() / 13) * 2;
+
+
+
 
                             setPowerX(c);
+                            setPowerY(c);
                             startingPositionX = bitmap.getWidth() / 20;
                             startingPositionY = bitmap.getHeight() - bitmap.getHeight() / 6;
                             bitmap = Bitmap.createScaledBitmap(bitmap, c.getWidth(), c.getHeight() - c.getHeight() / 4, false);
@@ -180,6 +186,35 @@ public class surfaceView extends SurfaceView implements Runnable {
                         drawPowers(c);
                         SystemClock.sleep(200);
 
+                        // to move the power in a way
+                        // how to use the power
+
+                        Bitmap useingNowBitmap;
+                        if (done == 1){
+
+                            useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.MIDDLE_X, (int) AppConstant.POWERS_Y, false);
+                            c.drawBitmap(useingNowBitmap, POWERX_DELTA_X + 15, POWERS_Y + 15, null);
+
+                            while(x == endPositionX && y == endPositionY){
+                                if(Math.abs(endPositionX-AppConstant.MIDDLE_X) > Math.abs(endPositionY-AppConstant.POWERS_Y)){
+                                    AppConstant.MIDDLE_X += ratio;
+                                    AppConstant.POWERS_Y += 1;
+                                    useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.MIDDLE_X, (int) AppConstant.POWERS_Y, false);
+                                }
+                                if(Math.abs(endPositionX-AppConstant.MIDDLE_X) < Math.abs(endPositionY-AppConstant.POWERS_Y)){
+                                    AppConstant.MIDDLE_X += 1;
+                                    AppConstant.POWERS_Y += ratio;
+                                    useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.MIDDLE_X, (int) AppConstant.POWERS_Y, false);
+                                }
+                                if(Math.abs(endPositionX-AppConstant.MIDDLE_X) == Math.abs(endPositionY-AppConstant.POWERS_Y)){
+                                    AppConstant.MIDDLE_X += 1;
+                                    AppConstant.POWERS_Y += 1;
+                                    useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.MIDDLE_X, (int) AppConstant.POWERS_Y, false);
+                                }
+
+                            }
+                        }
+
 
                     }
 
@@ -196,11 +231,20 @@ public class surfaceView extends SurfaceView implements Runnable {
     }
 
     private void setPowerX(Canvas c) {
-        float deltaX = (c.getWidth() / 13) * 2;
+        float deltaX = POWERX_DELTA_X;
         float x = deltaX;
         for (int i = 0; i < AppConstant.NUM_OF_POWERS; i++) {
             powerX[i] = x;
             x += deltaX * 1.1f;
+        }
+    }
+
+    private void setPowerY(Canvas c) {
+        float deltaY = POWERS_Y;
+        float y = deltaY;
+        for (int i = 0; i < AppConstant.NUM_OF_POWERS; i++) {
+            powerY[i] = y;
+            y += POWERX_DELTA_X * 1.65f;
         }
     }
 
@@ -250,9 +294,8 @@ public class surfaceView extends SurfaceView implements Runnable {
 
 
     private void drawPowers(Canvas c) {
-        float deltaX = (c.getWidth() / 13) * 2;
-        float x = deltaX;
-        float y = c.getHeight() - (c.getHeight() / 33) * 8;
+        float deltaX = POWERX_DELTA_X;
+        float y = POWERS_Y;
         float deltaY = deltaX * 1.65f;
 
         for (int i = 0; i < AppConstant.NUM_OF_POWERS; i++) {
@@ -263,18 +306,15 @@ public class surfaceView extends SurfaceView implements Runnable {
 
             // לעשות את המספרים של הכוחות (טעינה) todo
 
-            c.drawText(currPowers[i].reloading , x , y, p);
+            //c.drawText(currPowers[i].reloading , x , y, p);
 
 
         }
 
-        deltaX = (c.getWidth() / 13) * 2;
+        deltaX = POWERX_DELTA_X;
         x = deltaX;
-        y = c.getHeight() - (c.getHeight() / 33) * 8;
+        y = POWERS_Y;
         deltaY = deltaX * 1.3f;
-
-        float powersRight = (c.getWidth() / 13) * 2;
-        float powersLeft = c.getHeight() - (c.getHeight() / 33) * 8;
 
 
         Powers[] currPowers = AppConstant.currPowers;
@@ -304,30 +344,22 @@ public class surfaceView extends SurfaceView implements Runnable {
     }
 
 
-    //הזזת כוחות
+    //moving powers
 
     private int clickCounter = 0;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
-        float x1;
-        float y1;
-        float x, y;
-        float d = 0;
 
 
         switch (event.getAction()) {
 
             case MotionEvent.ACTION_UP:
-                clickCounter++;
 
                 // todo לכתוב בצד אחד שבחרת באותו כוח (מה שמיכל אמרה לשים בצד)
 
-                if(clickCounter == 1){
-                    x1 = event.getX();
-                    y1 = event.getY(); //
-                }
+
 
                  x = event.getX();
                  y = event.getY();
@@ -336,16 +368,31 @@ public class surfaceView extends SurfaceView implements Runnable {
                 int index = -1;
 
                 for (int i = 0; i < AppConstant.NUM_OF_POWERS; i++) {
-                    if(x > powerX[i] && x < powerX[i] +POWERX_DELTA_X && y > powerX[i] && y < powerX[i] +POWERX_DELTA_Y )
+                    // if clicked onm one of the powers
+                    if(x > powerX[i] && x < powerX[i] + POWERX_DELTA_X && y < powerY[i] && y > powerY[i] - (POWERS_Y + POWERX_DELTA_X * 1.65f));
                     {
-                        index = i;
+                        // if there is enough load
+                        if(currPowers[i].reloading >= powerBar.getLoad())
+                        {
+                            index = i;
+
+                            clickCounter=1;
+                            startingPositionY = y;
+                            startingPositionX = x;
+
+                        }
+                    //    else
+
+                        //  Toast.makeText(this, "You don't have enough powerLoad for this power", Toast.LENGTH_SHORT).show();
+
+
 
                     }
-                    if(currPowers[index].reloading < powerBar.getLoad())
-                    {
-                       Toast.makeText(this, "You don't have enough powerLoad for this power", Toast.LENGTH_SHORT).show();
-                    }
+
                 }
+
+                // starting position - fixed
+                // end position
 
                 // KEEP IT SIMPLE!
 
@@ -353,12 +400,25 @@ public class surfaceView extends SurfaceView implements Runnable {
                     powerIndexChoice = index;
                     // did not select a power
 
-                if(clickCounter == 2 )
-                {
-                    startingPositionY = y1;
-                    startingPositionX = x1;
-                    d = Math.sqrt((x1 - x)^2 + (y1 - y)^2);
-                    y1 += 10;
+
+                // if index =-1  this means not power selected
+                // if clickCounter == 0 -> first clicked not on power ->
+                // if clickCounter == 1-> this means that they selected power already
+                // and this is second clicked
+
+                if(index==-1) {
+                    if (clickCounter == 1) {
+                        endPositionX = x;
+                        endPositionY = y;
+
+                        // finmd rationm between source and target
+
+                        // deltaX   delatY
+                        ratio = (endPositionX-AppConstant.MIDDLE_X)/(endPositionY-AppConstant.POWERS_Y);
+                        done = 1;
+
+                    }
+
                 }
 
                 break;
@@ -366,9 +426,6 @@ public class surfaceView extends SurfaceView implements Runnable {
         }
         return true;
     }
-
-
-
 
 
 }
