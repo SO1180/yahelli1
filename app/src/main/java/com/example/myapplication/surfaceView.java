@@ -21,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -55,7 +56,9 @@ public class surfaceView extends SurfaceView implements Runnable {
     float x, y;
     int done = 0;
     int powerIndexChoice = 0;
-
+    float yWithFifteen;
+    float xWithFifteen;
+    float xMinusFifteen;
 
     private float[] powerX = new float[AppConstant.NUM_OF_POWERS];
     private float[] powerY = new float[AppConstant.NUM_OF_POWERS];
@@ -89,34 +92,11 @@ public class surfaceView extends SurfaceView implements Runnable {
 
     @Override
     public void run() {
-        hilaPaint.setColor(getResources().getColor(R.color.hila));
-        hilaPaint.setStyle(Paint.Style.STROKE);
-        hilaPaint.setStrokeWidth(4);
-
-
-        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img);
-        bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.img_1);
-        figure1 = BitmapFactory.decodeResource(getResources(), R.drawable.figure1);
-        figure2 = BitmapFactory.decodeResource(getResources(), R.drawable.figure2);
-        figure3 = BitmapFactory.decodeResource(getResources(), R.drawable.figure3);
-        figure4 = BitmapFactory.decodeResource(getResources(), R.drawable.figure4);
-        figure5 = BitmapFactory.decodeResource(getResources(), R.drawable.figure5);
-
-        powerArrows = BitmapFactory.decodeResource(getResources(), R.drawable.arrows);
-        powerRocket = BitmapFactory.decodeResource(getResources(), R.drawable.rocket);
-        powerBoomb = BitmapFactory.decodeResource(getResources(), R.drawable.boomb);
-        powerSnowball = BitmapFactory.decodeResource(getResources(), R.drawable.snowball);
-        powerFireball = BitmapFactory.decodeResource(getResources(), R.drawable.fireball);
-        powerBoomerang = BitmapFactory.decodeResource(getResources(), R.drawable.boomerang);
-        powerRanDanker = BitmapFactory.decodeResource(getResources(), R.drawable.randanker);
-        powerRock = BitmapFactory.decodeResource(getResources(), R.drawable.rock);
-        powerSnowflake = BitmapFactory.decodeResource(getResources(), R.drawable.snowflake);
-        powerWoodenlog = BitmapFactory.decodeResource(getResources(), R.drawable.woodenlog);
 
         float deltax = 10;
 
-        this.powerBar = new PowerBar();
-        this.powerBar.startLoading();
+        initUIElements();
+
         while (threadRunning) { // כל המשחק ממשיך לפעול
 
 
@@ -129,44 +109,10 @@ public class surfaceView extends SurfaceView implements Runnable {
                     c = this.getHolder().lockCanvas();
                     synchronized (this.getHolder()) {
 
-                        if (init) {
+                        if (init)
+                            initGameConsts(c);
 
-                            AppConstant.IMAGE_WIDTH = c.getWidth() / 6;
-                            AppConstant.IMAGE_HEIGHT = c.getHeight() / 7;
-
-                            AppConstant.MIDDLE_X = c.getWidth()/2;
-                            AppConstant.POWERS_Y = c.getHeight() - (c.getHeight() / 33) * 8;
-
-                            AppConstant.POWERX_DELTA_X= (c.getWidth() / 13) * 2;
-
-
-
-
-                            setPowerX(c);
-                            setPowerY(c);
-                            startingPositionX = bitmap.getWidth() / 20;
-                            startingPositionY = bitmap.getHeight() - bitmap.getHeight() / 6;
-                            bitmap = Bitmap.createScaledBitmap(bitmap, c.getWidth(), c.getHeight() - c.getHeight() / 4, false);
-                            bitmap2 = Bitmap.createScaledBitmap(bitmap2, c.getWidth(), c.getHeight() - (int) ((c.getHeight() / 3.0) * 4), false);
-                            figure1 = Bitmap.createScaledBitmap(figure1, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
-
-                            // טיימר
-                     /*       CountDownTimer timer = new CountDownTimer(60000, 1000) {
-                                @Override
-                                public void onTick(long l) {
-
-                                }
-
-                                @Override
-                                public void onFinish() {
-
-                                }
-                            };
-
-                      */
-
-                            init = false;
-                        }
+                                                   }
                         //כאן יהיהה המשחק
 
                         c.drawBitmap(bitmap, 0, 0, null);
@@ -216,7 +162,6 @@ public class surfaceView extends SurfaceView implements Runnable {
                         }
 
 
-                    }
 
                 } catch (Exception e) {
                     Log.d("WHY WHY", "run: " + e.getMessage());
@@ -228,6 +173,77 @@ public class surfaceView extends SurfaceView implements Runnable {
                 }
             }
         }
+    }
+
+    private void initGameConsts(Canvas c) {
+
+        AppConstant.IMAGE_WIDTH = c.getWidth() / 6;
+        AppConstant.IMAGE_HEIGHT = c.getHeight() / 7;
+
+        AppConstant.MIDDLE_X = c.getWidth()/2;
+        AppConstant.POWERS_Y = c.getHeight() - (c.getHeight() / 33) * 8;
+
+        AppConstant.POWERX_DELTA_X= (c.getWidth() / 13) * 2;
+
+
+
+
+        setPowerX(c);
+        setPowerY(c);
+        startingPositionX = bitmap.getWidth() / 20;
+        startingPositionY = bitmap.getHeight() - bitmap.getHeight() / 6;
+        bitmap = Bitmap.createScaledBitmap(bitmap, c.getWidth(), c.getHeight() - c.getHeight() / 4, false);
+        bitmap2 = Bitmap.createScaledBitmap(bitmap2, c.getWidth(), c.getHeight() - (int) ((c.getHeight() / 3.0) * 4), false);
+        figure1 = Bitmap.createScaledBitmap(figure1, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
+
+        // טיימר
+                     /*       CountDownTimer timer = new CountDownTimer(60000, 1000) {
+                                @Override
+                                public void onTick(long l) {
+
+                                }
+
+                                @Override
+                                public void onFinish() {
+
+                                }
+                            };
+
+                      */
+
+        init = false;
+
+    }
+
+    private void initUIElements() {
+
+        hilaPaint.setColor(getResources().getColor(R.color.hila));
+        hilaPaint.setStyle(Paint.Style.STROKE);
+        hilaPaint.setStrokeWidth(4);
+
+
+        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img);
+        bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.img_1);
+        figure1 = BitmapFactory.decodeResource(getResources(), R.drawable.figure1);
+        figure2 = BitmapFactory.decodeResource(getResources(), R.drawable.figure2);
+        figure3 = BitmapFactory.decodeResource(getResources(), R.drawable.figure3);
+        figure4 = BitmapFactory.decodeResource(getResources(), R.drawable.figure4);
+        figure5 = BitmapFactory.decodeResource(getResources(), R.drawable.figure5);
+
+        powerArrows = BitmapFactory.decodeResource(getResources(), R.drawable.arrows);
+        powerRocket = BitmapFactory.decodeResource(getResources(), R.drawable.rocket);
+        powerBoomb = BitmapFactory.decodeResource(getResources(), R.drawable.boomb);
+        powerSnowball = BitmapFactory.decodeResource(getResources(), R.drawable.snowball);
+        powerFireball = BitmapFactory.decodeResource(getResources(), R.drawable.fireball);
+        powerBoomerang = BitmapFactory.decodeResource(getResources(), R.drawable.boomerang);
+        powerRanDanker = BitmapFactory.decodeResource(getResources(), R.drawable.randanker);
+        powerRock = BitmapFactory.decodeResource(getResources(), R.drawable.rock);
+        powerSnowflake = BitmapFactory.decodeResource(getResources(), R.drawable.snowflake);
+        powerWoodenlog = BitmapFactory.decodeResource(getResources(), R.drawable.woodenlog);
+
+
+        this.powerBar = new PowerBar();
+        this.powerBar.startLoading();
     }
 
     private void setPowerX(Canvas c) {
@@ -315,6 +331,10 @@ public class surfaceView extends SurfaceView implements Runnable {
         x = deltaX;
         y = POWERS_Y;
         deltaY = deltaX * 1.3f;
+        yWithFifteen = y + 15;
+        xWithFifteen = x + 15;
+        xMinusFifteen = x - 15;
+
 
 
         Powers[] currPowers = AppConstant.currPowers;
@@ -332,7 +352,7 @@ public class surfaceView extends SurfaceView implements Runnable {
         for (int i = 0; i < AppConstant.NUM_OF_POWERS; i++) {
             Paint p2 = new Paint();
             p2.setColor(getResources().getColor(R.color.white));
-            c.drawRect(x + 15, y + 15, x + deltaX - 15, y + deltaY + 15, p2);
+            c.drawRect(x + 15, y + 15, x - 15 + deltaX, y + 15 + deltaY, p2);
 
             Bitmap b = Bitmap.createScaledBitmap(AppConstant.currPowers[i].getBitmap(), (int) deltaX - 25, (int) deltaY, false);
             c.drawBitmap(b, x + 15, y + 15, null);
@@ -361,29 +381,31 @@ public class surfaceView extends SurfaceView implements Runnable {
 
 
 
-                 x = event.getX();
-                 y = event.getY();
+                float x1 = event.getX();
+                 float y1 = event.getY();
+
+
 
                  // incase click is odd ->  we use Array of X
                 int index = -1;
 
                 for (int i = 0; i < AppConstant.NUM_OF_POWERS; i++) {
                     // if clicked onm one of the powers
-                    if(x > powerX[i] && x < powerX[i] + POWERX_DELTA_X && y < powerY[i] && y > powerY[i] - (POWERS_Y + POWERX_DELTA_X * 1.65f));
+                    if(x1 >= powerX[i] && x1 <= powerX[i] + POWERX_DELTA_X && y1 >= yWithFifteen  && y1 <= yWithFifteen + POWERX_DELTA_X)
                     {
                         // if there is enough load
-                        if(currPowers[i].reloading >= powerBar.getLoad())
+                        if(currPowers[i].reloading <= powerBar.getLoad())
                         {
                             index = i;
 
                             clickCounter=1;
-                            startingPositionY = y;
-                            startingPositionX = x;
+                            startingPositionY = y1;
+                            startingPositionX = x1;
 
                         }
-                    //    else
+                        else
 
-                        //  Toast.makeText(this, "You don't have enough powerLoad for this power", Toast.LENGTH_SHORT).show();
+                          Toast.makeText(getContext(), "You don't have enough powerLoad for this power", Toast.LENGTH_SHORT).show();
 
 
 
@@ -408,10 +430,10 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                 if(index==-1) {
                     if (clickCounter == 1) {
-                        endPositionX = x;
-                        endPositionY = y;
+                        endPositionX = x1;
+                        endPositionY = y1;
 
-                        // finmd rationm between source and target
+                        // finmd ration between source and target
 
                         // deltaX   delatY
                         ratio = (endPositionX-AppConstant.MIDDLE_X)/(endPositionY-AppConstant.POWERS_Y);
