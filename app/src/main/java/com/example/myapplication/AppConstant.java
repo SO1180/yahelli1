@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 public class AppConstant {
 
+    public static float IMAGE_TOP;
     public static  float POWERS_Y;
     public static  float MIDDLE_X;
     public static  int IMAGE_WIDTH;

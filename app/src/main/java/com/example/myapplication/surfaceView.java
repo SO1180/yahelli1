@@ -61,8 +61,6 @@ public class surfaceView extends SurfaceView implements Runnable {
     float xMinusFifteen;
 
     private float[] powerX = new float[AppConstant.NUM_OF_POWERS];
-    private float[] powerY = new float[AppConstant.NUM_OF_POWERS];
-
 
     boolean init = true;
     private PowerBar powerBar;
@@ -85,7 +83,7 @@ public class surfaceView extends SurfaceView implements Runnable {
         AppConstant.currPowers[0] = new Powers(10, 4, powerRocket);
         AppConstant.currPowers[1] = new Powers(25, 5, powerSnowball);
         AppConstant.currPowers[2] = new Powers(15, 3, powerBoomb);
-        AppConstant.currPowers[3] = new Powers(10, 2, powerArrows);
+        AppConstant.currPowers[3] = new Powers(10, 10, powerArrows);
 
     }
 
@@ -134,19 +132,22 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                         // to move the power in a way
                         // how to use the power
+                    // POWERX_DELTA_X + 15, POWERS_Y + 15
 
                         Bitmap useingNowBitmap;
                         if (done == 1){
 
-                            useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.MIDDLE_X, (int) AppConstant.POWERS_Y, false);
-                            c.drawBitmap(useingNowBitmap, POWERX_DELTA_X + 15, POWERS_Y + 15, null);
+                            useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.IMAGE_WIDTH, (int) AppConstant.IMAGE_HEIGHT, false);
+                            c.drawBitmap(useingNowBitmap, AppConstant.MIDDLE_X - 100, AppConstant.IMAGE_TOP, null);
 
-                            while(x == endPositionX && y == endPositionY){
-                                if(Math.abs(endPositionX-AppConstant.MIDDLE_X) > Math.abs(endPositionY-AppConstant.POWERS_Y)){
-                                    AppConstant.MIDDLE_X += ratio;
-                                    AppConstant.POWERS_Y += 1;
-                                    useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.MIDDLE_X, (int) AppConstant.POWERS_Y, false);
-                                }
+
+                            if(x != endPositionX && y != endPositionY){
+                            //    if(Math.abs(endPositionX-AppConstant.MIDDLE_X) > Math.abs(endPositionY-AppConstant.POWERS_Y)){
+                                    AppConstant.MIDDLE_X += ratio*10;
+                                    AppConstant.IMAGE_TOP -= 10;
+                                  //  useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.MIDDLE_X, (int) AppConstant.POWERS_Y, false);
+                            /*
+                            }
                                 if(Math.abs(endPositionX-AppConstant.MIDDLE_X) < Math.abs(endPositionY-AppConstant.POWERS_Y)){
                                     AppConstant.MIDDLE_X += 1;
                                     AppConstant.POWERS_Y += ratio;
@@ -158,6 +159,8 @@ public class surfaceView extends SurfaceView implements Runnable {
                                     useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.MIDDLE_X, (int) AppConstant.POWERS_Y, false);
                                 }
 
+
+                             */
                             }
                         }
 
@@ -182,6 +185,7 @@ public class surfaceView extends SurfaceView implements Runnable {
 
         AppConstant.MIDDLE_X = c.getWidth()/2;
         AppConstant.POWERS_Y = c.getHeight() - (c.getHeight() / 33) * 8;
+        AppConstant.IMAGE_TOP = c.getHeight() - (c.getHeight() / 5) * 2;
 
         AppConstant.POWERX_DELTA_X= (c.getWidth() / 13) * 2;
 
@@ -189,7 +193,6 @@ public class surfaceView extends SurfaceView implements Runnable {
 
 
         setPowerX(c);
-        setPowerY(c);
         startingPositionX = bitmap.getWidth() / 20;
         startingPositionY = bitmap.getHeight() - bitmap.getHeight() / 6;
         bitmap = Bitmap.createScaledBitmap(bitmap, c.getWidth(), c.getHeight() - c.getHeight() / 4, false);
@@ -255,14 +258,6 @@ public class surfaceView extends SurfaceView implements Runnable {
         }
     }
 
-    private void setPowerY(Canvas c) {
-        float deltaY = POWERS_Y;
-        float y = deltaY;
-        for (int i = 0; i < AppConstant.NUM_OF_POWERS; i++) {
-            powerY[i] = y;
-            y += POWERX_DELTA_X * 1.65f;
-        }
-    }
 
 
     // טיימר
@@ -382,7 +377,7 @@ public class surfaceView extends SurfaceView implements Runnable {
 
 
                 float x1 = event.getX();
-                 float y1 = event.getY();
+                float y1 = event.getY();
 
 
 
@@ -406,8 +401,6 @@ public class surfaceView extends SurfaceView implements Runnable {
                         else
 
                           Toast.makeText(getContext(), "You don't have enough powerLoad for this power", Toast.LENGTH_SHORT).show();
-
-
 
                     }
 
@@ -436,7 +429,7 @@ public class surfaceView extends SurfaceView implements Runnable {
                         // finmd ration between source and target
 
                         // deltaX   delatY
-                        ratio = (endPositionX-AppConstant.MIDDLE_X)/(endPositionY-AppConstant.POWERS_Y);
+                        ratio = (endPositionX-AppConstant.MIDDLE_X)/(AppConstant.POWERS_Y-endPositionY);
                         done = 1;
 
                     }
