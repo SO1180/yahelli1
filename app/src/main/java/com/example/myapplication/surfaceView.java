@@ -52,6 +52,8 @@ public class surfaceView extends SurfaceView implements Runnable {
     TextView textView;
 
     Paint hilaPaint = new Paint();
+    Paint radiusColor = new Paint();
+
     float ratio;
     float x, y;
     int done = 0;
@@ -137,34 +139,24 @@ public class surfaceView extends SurfaceView implements Runnable {
                         Bitmap useingNowBitmap;
                         if (done == 1){
 
+                            // useingNowBitmap.getHeight() / 2
+                            // useingNowBitmap.getWidth() / 2
                             useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.IMAGE_WIDTH, (int) AppConstant.IMAGE_HEIGHT, false);
                             c.drawBitmap(useingNowBitmap, AppConstant.MIDDLE_X - 100, AppConstant.IMAGE_TOP, null);
+                            c.drawCircle(endPositionX, endPositionY , useingNowBitmap.getWidth() * 1.25f, radiusColor);
 
 
-                            if(x != endPositionX && y != endPositionY){
+                            float movingPowerX = AppConstant.MIDDLE_X;
+                            float movingPowerY = AppConstant.IMAGE_TOP;
+                            if(endPositionX + x > useingNowBitmap.getWidth() * 1.25f && endPositionY + y > useingNowBitmap.getWidth() * 1.25f){
                             //    if(Math.abs(endPositionX-AppConstant.MIDDLE_X) > Math.abs(endPositionY-AppConstant.POWERS_Y)){
-                                    AppConstant.MIDDLE_X += ratio*10;
-                                    AppConstant.IMAGE_TOP -= 10;
+                                  movingPowerX += ratio * 10;
+                                  movingPowerY -= 10;
                                   //  useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.MIDDLE_X, (int) AppConstant.POWERS_Y, false);
-                            /*
-                            }
-                                if(Math.abs(endPositionX-AppConstant.MIDDLE_X) < Math.abs(endPositionY-AppConstant.POWERS_Y)){
-                                    AppConstant.MIDDLE_X += 1;
-                                    AppConstant.POWERS_Y += ratio;
-                                    useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.MIDDLE_X, (int) AppConstant.POWERS_Y, false);
-                                }
-                                if(Math.abs(endPositionX-AppConstant.MIDDLE_X) == Math.abs(endPositionY-AppConstant.POWERS_Y)){
-                                    AppConstant.MIDDLE_X += 1;
-                                    AppConstant.POWERS_Y += 1;
-                                    useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.MIDDLE_X, (int) AppConstant.POWERS_Y, false);
-                                }
-
-
-                             */
                             }
                         }
 
-
+                        // endPositionX -> all power radious
 
                 } catch (Exception e) {
                     Log.d("WHY WHY", "run: " + e.getMessage());
@@ -223,6 +215,10 @@ public class surfaceView extends SurfaceView implements Runnable {
         hilaPaint.setColor(getResources().getColor(R.color.hila));
         hilaPaint.setStyle(Paint.Style.STROKE);
         hilaPaint.setStrokeWidth(4);
+
+        radiusColor.setColor(getResources().getColor(R.color.radius));
+        radiusColor.setStyle(Paint.Style.STROKE);
+        radiusColor.setStrokeWidth(2);
 
 
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img);
@@ -317,7 +313,7 @@ public class surfaceView extends SurfaceView implements Runnable {
 
             // לעשות את המספרים של הכוחות (טעינה) todo
 
-            //c.drawText(currPowers[i].reloading , x , y, p);
+            c.drawText(String.valueOf(currPowers[i].reloading), x , POWERS_Y, p);
 
 
         }
@@ -374,6 +370,10 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                 // todo לכתוב בצד אחד שבחרת באותו כוח (מה שמיכל אמרה לשים בצד)
 
+                if(done == 1)
+                {
+                    done = 0;
+                }
 
 
                 float x1 = event.getX();
@@ -431,9 +431,7 @@ public class surfaceView extends SurfaceView implements Runnable {
                         // deltaX   delatY
                         ratio = (endPositionX-AppConstant.MIDDLE_X)/(AppConstant.POWERS_Y-endPositionY);
                         done = 1;
-
                     }
-
                 }
 
                 break;
