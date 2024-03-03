@@ -50,6 +50,7 @@ public class surfaceView extends SurfaceView implements Runnable {
     Bitmap powerSnowflake;
     Bitmap powerWoodenlog;
     TextView textView;
+    float sum = 1000;
 
     Paint hilaPaint = new Paint();
     Paint radiusColor = new Paint();
@@ -61,6 +62,11 @@ public class surfaceView extends SurfaceView implements Runnable {
     float yWithFifteen;
     float xWithFifteen;
     float xMinusFifteen;
+
+
+    float movingXDelta = 0;
+    float movingYDelta = 0;
+
 
     private float[] powerX = new float[AppConstant.NUM_OF_POWERS];
 
@@ -99,7 +105,6 @@ public class surfaceView extends SurfaceView implements Runnable {
 
         while (threadRunning) { // כל המשחק ממשיך לפעול
 
-
             if (isRunning) { //כשמישהו מנצח.מפסיד
                 if (!holder.getSurface().isValid())
                     continue;
@@ -107,52 +112,54 @@ public class surfaceView extends SurfaceView implements Runnable {
                 Canvas c = null;
                 try {
                     c = this.getHolder().lockCanvas();
-                    synchronized (this.getHolder()) {
-
+                    synchronized (this.getHolder())
+                    {
                         if (init)
                             initGameConsts(c);
+                    }
 
-                                                   }
-                        //כאן יהיהה המשחק
+                    //כאן יהיהה המשחק
 
-                        c.drawBitmap(bitmap, 0, 0, null);
-                        c.drawBitmap(bitmap2, 0, c.getHeight() - c.getHeight() / 4, null);
-                        c.drawBitmap(figure1, startingPositionX, startingPositionY, null);
+                    drawImages(c);
+                    startingPositionX += deltax;
 
-
-                        c.drawCircle(startingPositionX + figure1.getWidth() / 2, startingPositionY + figure1.getHeight() / 2, figure1.getWidth() * 1.25f, hilaPaint);
-
-                        startingPositionX += deltax;
-
-                        if (startingPositionX < 0 || startingPositionX + figure1.getWidth() > c.getWidth() - c.getWidth() / 6)
-                            deltax = -deltax;
+                    if (startingPositionX < 0 || startingPositionX + figure1.getWidth() > c.getWidth() - c.getWidth() / 6)
+                        deltax = -deltax;
 
 
-                        drawPowerBar(c);
-                        drawPowers(c);
-                        SystemClock.sleep(200);
+                    drawPowerBar(c);
+                    drawPowers(c);
+                    SystemClock.sleep(200);
 
-                        // to move the power in a way
-                        // how to use the power
+                    float movingPowerX = AppConstant.MIDDLE_X;
+                    float movingPowerY = AppConstant.IMAGE_TOP;
+
+                    // to move the power in a way
+                    // how to use the power
                     // POWERX_DELTA_X + 15, POWERS_Y + 15
 
                         Bitmap useingNowBitmap;
-                        if (done == 1){
+                        if (done == 1)
+                        {
 
-                            // useingNowBitmap.getHeight() / 2
-                            // useingNowBitmap.getWidth() / 2
                             useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.IMAGE_WIDTH, (int) AppConstant.IMAGE_HEIGHT, false);
-                            c.drawBitmap(useingNowBitmap, AppConstant.MIDDLE_X - 100, AppConstant.IMAGE_TOP, null);
+                            c.drawBitmap(useingNowBitmap, movingPowerX - 100 + movingXDelta, movingPowerY+movingYDelta, null);
                             c.drawCircle(endPositionX, endPositionY , useingNowBitmap.getWidth() * 1.25f, radiusColor);
 
 
-                            float movingPowerX = AppConstant.MIDDLE_X;
-                            float movingPowerY = AppConstant.IMAGE_TOP;
-                            if(endPositionX + x > useingNowBitmap.getWidth() * 1.25f && endPositionY + y > useingNowBitmap.getWidth() * 1.25f){
-                            //    if(Math.abs(endPositionX-AppConstant.MIDDLE_X) > Math.abs(endPositionY-AppConstant.POWERS_Y)){
-                                  movingPowerX += ratio * 10;
-                                  movingPowerY -= 10;
-                                  //  useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.MIDDLE_X, (int) AppConstant.POWERS_Y, false);
+
+                            // check collision
+                            //  distance upper right corner
+                            // distance upper left coprner
+                            // radius = Math.sqrt(
+
+                            float v = (float) Math.pow((endPositionX - (movingPowerX - 100 + movingXDelta)), 2);
+                            float w = (float) Math.pow((endPositionY - (movingPowerY + movingYDelta)), 2);
+                            float distance = (float) Math.sqrt(v + w);
+
+                            if(distance > useingNowBitmap.getWidth() * 1.25f && distance > useingNowBitmap.getWidth() * 1.25f){
+                                movingXDelta += ratio * 20;
+                                movingYDelta -= 20;
                             }
                         }
 
@@ -170,10 +177,21 @@ public class surfaceView extends SurfaceView implements Runnable {
         }
     }
 
+    private void drawImages(Canvas c) {
+
+        c.drawBitmap(bitmap, 0, 0, null);
+        c.drawBitmap(bitmap2, 0, c.getHeight() - c.getHeight() / 4, null);
+        c.drawBitmap(figure1, startingPositionX, startingPositionY, null);
+        //c.drawText(sum, startingPositionX, startingPositionY + startingPositionY /20, null);
+
+        c.drawCircle(startingPositionX + figure1.getWidth() / 2, startingPositionY + figure1.getHeight() / 2, figure1.getWidth() * 1.25f, hilaPaint);
+
+    }
+
     private void initGameConsts(Canvas c) {
 
-        AppConstant.IMAGE_WIDTH = c.getWidth() / 6;
-        AppConstant.IMAGE_HEIGHT = c.getHeight() / 7;
+        AppConstant.IMAGE_WIDTH = c.getWidth() / 6; // 6
+        AppConstant.IMAGE_HEIGHT = c.getHeight() / 7; // 7
 
         AppConstant.MIDDLE_X = c.getWidth()/2;
         AppConstant.POWERS_Y = c.getHeight() - (c.getHeight() / 33) * 8;
@@ -182,14 +200,17 @@ public class surfaceView extends SurfaceView implements Runnable {
         AppConstant.POWERX_DELTA_X= (c.getWidth() / 13) * 2;
 
 
-
-
         setPowerX(c);
         startingPositionX = bitmap.getWidth() / 20;
         startingPositionY = bitmap.getHeight() - bitmap.getHeight() / 6;
         bitmap = Bitmap.createScaledBitmap(bitmap, c.getWidth(), c.getHeight() - c.getHeight() / 4, false);
         bitmap2 = Bitmap.createScaledBitmap(bitmap2, c.getWidth(), c.getHeight() - (int) ((c.getHeight() / 3.0) * 4), false);
         figure1 = Bitmap.createScaledBitmap(figure1, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
+        figure2 = Bitmap.createScaledBitmap(figure2, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
+        figure3 = Bitmap.createScaledBitmap(figure3, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
+        figure4 = Bitmap.createScaledBitmap(figure4, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
+        figure5 = Bitmap.createScaledBitmap(figure5, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
+
 
         // טיימר
                      /*       CountDownTimer timer = new CountDownTimer(60000, 1000) {
@@ -220,6 +241,13 @@ public class surfaceView extends SurfaceView implements Runnable {
         radiusColor.setStyle(Paint.Style.STROKE);
         radiusColor.setStrokeWidth(2);
 
+        drawBitmaps();
+
+        this.powerBar = new PowerBar();
+        this.powerBar.startLoading();
+    }
+
+    private void drawBitmaps() {
 
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img);
         bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.img_1);
@@ -240,9 +268,6 @@ public class surfaceView extends SurfaceView implements Runnable {
         powerSnowflake = BitmapFactory.decodeResource(getResources(), R.drawable.snowflake);
         powerWoodenlog = BitmapFactory.decodeResource(getResources(), R.drawable.woodenlog);
 
-
-        this.powerBar = new PowerBar();
-        this.powerBar.startLoading();
     }
 
     private void setPowerX(Canvas c) {
@@ -290,6 +315,9 @@ public class surfaceView extends SurfaceView implements Runnable {
             Rect rect = new Rect(x, y, x + deltaX, y + deltaY);
             c.drawRect(rect, p);
             c.drawText("" + (i + 1), rect.centerX(), rect.centerY() + 10, drawPaint);
+
+
+
             x += deltaX;
         }
         for (int i = powerBar.getLoad(); i < AppConstant.MAX_NUM_OF_BARS; i++) {
@@ -308,14 +336,23 @@ public class surfaceView extends SurfaceView implements Runnable {
         for (int i = 0; i < AppConstant.NUM_OF_POWERS; i++) {
             Paint p = new Paint();
             p.setColor(getResources().getColor(R.color.powersBar));
-            c.drawRect(powerX[i], y, powerX[i] + deltaX, y + deltaY, p);
+            Rect rect = new Rect((int)powerX[i], (int)y, (int)(powerX[i] + deltaX), (int)(y + deltaY));
 
+
+            c.drawRect(rect, p);
 
             // לעשות את המספרים של הכוחות (טעינה) todo
 
-            c.drawText(String.valueOf(currPowers[i].reloading), x , POWERS_Y, p);
+            Paint paint2 = new Paint();
+            paint2.setColor(getResources().getColor(R.color.radius));
+            paint2.setTextSize(50);
+            paint2.setTextAlign(Paint.Align.CENTER);
 
 
+
+            c.drawText(String.valueOf(currPowers[i].reloading), rect.centerX(),rect.bottom+10, paint2);
+
+            //
         }
 
         deltaX = POWERX_DELTA_X;
@@ -429,8 +466,11 @@ public class surfaceView extends SurfaceView implements Runnable {
                         // finmd ration between source and target
 
                         // deltaX   delatY
+
                         ratio = (endPositionX-AppConstant.MIDDLE_X)/(AppConstant.POWERS_Y-endPositionY);
                         done = 1;
+
+                        powerBar.setLoad(powerBar.getLoad()-currPowers[powerIndexChoice].getReloading());
                     }
                 }
 
