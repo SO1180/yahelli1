@@ -86,6 +86,8 @@ public class surfaceView extends SurfaceView implements Runnable {
 
     }
 
+    // רק לבנתיים מערך של כוחות
+
     private void temporaryConfiguration() {
 
         AppConstant.currPowers[0] = new Powers(10, 4, powerRocket);
@@ -177,19 +179,27 @@ public class surfaceView extends SurfaceView implements Runnable {
         }
     }
 
+    // drawimg the bitmaps on canvas
+
     private void drawImages(Canvas c) {
 
         c.drawBitmap(bitmap, 0, 0, null);
         c.drawBitmap(bitmap2, 0, c.getHeight() - c.getHeight() / 4, null);
         c.drawBitmap(figure1, startingPositionX, startingPositionY, null);
+
+        // todo - amount of life above figure's heads
         //c.drawText(sum, startingPositionX, startingPositionY + startingPositionY /20, null);
 
         c.drawCircle(startingPositionX + figure1.getWidth() / 2, startingPositionY + figure1.getHeight() / 2, figure1.getWidth() * 1.25f, hilaPaint);
 
     }
 
+
+    // creation of sizes
+
     private void initGameConsts(Canvas c) {
 
+        // todo - all figures should be in the same size
         AppConstant.IMAGE_WIDTH = c.getWidth() / 6; // 6
         AppConstant.IMAGE_HEIGHT = c.getHeight() / 7; // 7
 
@@ -212,7 +222,7 @@ public class surfaceView extends SurfaceView implements Runnable {
         figure5 = Bitmap.createScaledBitmap(figure5, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
 
 
-        // טיימר
+        // todo timer - does not working
                      /*       CountDownTimer timer = new CountDownTimer(60000, 1000) {
                                 @Override
                                 public void onTick(long l) {
@@ -231,6 +241,9 @@ public class surfaceView extends SurfaceView implements Runnable {
 
     }
 
+
+    // creation of colors, bitmaps and powerBar
+
     private void initUIElements() {
 
         hilaPaint.setColor(getResources().getColor(R.color.hila));
@@ -246,6 +259,9 @@ public class surfaceView extends SurfaceView implements Runnable {
         this.powerBar = new PowerBar();
         this.powerBar.startLoading();
     }
+
+
+    // creation of powers and figures
 
     private void drawBitmaps() {
 
@@ -270,6 +286,9 @@ public class surfaceView extends SurfaceView implements Runnable {
 
     }
 
+
+    // מעדכנים מערך במקום של האיקסים של הכוחות
+
     private void setPowerX(Canvas c) {
         float deltaX = POWERX_DELTA_X;
         float x = deltaX;
@@ -278,7 +297,6 @@ public class surfaceView extends SurfaceView implements Runnable {
             x += deltaX * 1.1f;
         }
     }
-
 
 
     // טיימר
@@ -298,6 +316,7 @@ public class surfaceView extends SurfaceView implements Runnable {
         }
     }.start();
 
+    // יצירת הפווארבר
     private void drawPowerBar(Canvas c) {
         int x = 0;
         int y = c.getHeight() - c.getHeight() / 12;
@@ -305,6 +324,7 @@ public class surfaceView extends SurfaceView implements Runnable {
         int deltaY = deltaX;
 
         Paint p = new Paint();
+
         Paint drawPaint = new Paint();
         drawPaint.setTextAlign(Paint.Align.CENTER);
         drawPaint.setTextSize(40);  //set text size
@@ -328,6 +348,7 @@ public class surfaceView extends SurfaceView implements Runnable {
     }
 
 
+    // יצירת הכוחות והמספרים של הטעינה שלהם
     private void drawPowers(Canvas c) {
         float deltaX = POWERX_DELTA_X;
         float y = POWERS_Y;
@@ -341,18 +362,15 @@ public class surfaceView extends SurfaceView implements Runnable {
 
             c.drawRect(rect, p);
 
-            // לעשות את המספרים של הכוחות (טעינה) todo
+            // הוספת מספרים לכוחות - טעינה
 
             Paint paint2 = new Paint();
-            paint2.setColor(getResources().getColor(R.color.radius));
-            paint2.setTextSize(50);
+            paint2.setColor(getResources().getColor(R.color.purple));
+            paint2.setTextSize(40);
             paint2.setTextAlign(Paint.Align.CENTER);
 
+            c.drawText(String.valueOf(currPowers[i].reloading), rect.centerX(),rect.bottom , paint2);
 
-
-            c.drawText(String.valueOf(currPowers[i].reloading), rect.centerX(),rect.bottom+10, paint2);
-
-            //
         }
 
         deltaX = POWERX_DELTA_X;
@@ -393,7 +411,6 @@ public class surfaceView extends SurfaceView implements Runnable {
 
 
     //moving powers
-
     private int clickCounter = 0;
 
     @Override
@@ -405,8 +422,9 @@ public class surfaceView extends SurfaceView implements Runnable {
 
             case MotionEvent.ACTION_UP:
 
-                // todo לכתוב בצד אחד שבחרת באותו כוח (מה שמיכל אמרה לשים בצד)
 
+                // todo שהכוחות יהיו שניה בערך בנקודת הסוף, יעלמו,
+                //  והכוח החדש שיוצא יצא מההתחלה
                 if(done == 1)
                 {
                     done = 0;
