@@ -51,6 +51,7 @@ public class surfaceView extends SurfaceView implements Runnable {
     Bitmap powerWoodenlog;
     TextView textView;
     float sum = 1000;
+    boolean gotIntoTheRadius = false;
 
     Paint hilaPaint = new Paint();
     Paint radiusColor = new Paint();
@@ -63,6 +64,9 @@ public class surfaceView extends SurfaceView implements Runnable {
     float xWithFifteen;
     float xMinusFifteen;
 
+    float figureIsMovingX;
+    float figureIsMovingY;
+
 
     float movingXDelta = 0;
     float movingYDelta = 0;
@@ -72,8 +76,8 @@ public class surfaceView extends SurfaceView implements Runnable {
 
     boolean init = true;
     private PowerBar powerBar;
-    private float endPositionX=0;
 
+    private float endPositionX=0;
     private float endPositionY=0;
 
     public surfaceView(Context context) {
@@ -124,8 +128,9 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                     drawImages(c);
                     startingPositionX += deltax;
+                    figureIsMovingX += deltax;
 
-                    if (startingPositionX < 0 || startingPositionX + figure1.getWidth() > c.getWidth() - c.getWidth() / 6)
+                    if (figureIsMovingX < 0 || figureIsMovingX + figure1.getWidth() > c.getWidth() - c.getWidth() / 6)
                         deltax = -deltax;
 
 
@@ -140,29 +145,20 @@ public class surfaceView extends SurfaceView implements Runnable {
                     // how to use the power
                     // POWERX_DELTA_X + 15, POWERS_Y + 15
 
-                        Bitmap useingNowBitmap;
+                        Bitmap useingNowBitmap = null;
                         if (done == 1)
                         {
+                            thePowerIsMovingOnTheCanvas(useingNowBitmap, c, movingPowerX, movingPowerY);
+                        }
 
-                            useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.IMAGE_WIDTH, (int) AppConstant.IMAGE_HEIGHT, false);
-                            c.drawBitmap(useingNowBitmap, movingPowerX - 100 + movingXDelta, movingPowerY+movingYDelta, null);
-                            c.drawCircle(endPositionX, endPositionY , useingNowBitmap.getWidth() * 1.25f, radiusColor);
-
-
-
-                            // check collision
-                            //  distance upper right corner
-                            // distance upper left coprner
-                            // radius = Math.sqrt(
-
-                            float v = (float) Math.pow((endPositionX - (movingPowerX - 100 + movingXDelta)), 2);
-                            float w = (float) Math.pow((endPositionY - (movingPowerY + movingYDelta)), 2);
-                            float distance = (float) Math.sqrt(v + w);
-
-                            if(distance > useingNowBitmap.getWidth() * 1.25f && distance > useingNowBitmap.getWidth() * 1.25f){
-                                movingXDelta += ratio * 20;
-                                movingYDelta -= 20;
+                        if(done == 0) {
+                            if (!gotIntoTheRadius)
+                            {
+                                thePowerIsMovingOnTheCanvas(useingNowBitmap, c, movingPowerX, movingPowerY);
                             }
+
+                            movingXDelta = 0;
+                            movingYDelta = 0;
                         }
 
                         // endPositionX -> all power radious
@@ -179,18 +175,48 @@ public class surfaceView extends SurfaceView implements Runnable {
         }
     }
 
+    private void thePowerIsMovingOnTheCanvas(Bitmap useingNowBitmap, Canvas c, float movingPowerX, float movingPowerY) {
+
+        useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.IMAGE_WIDTH, (int) AppConstant.IMAGE_HEIGHT, false);
+        c.drawBitmap(useingNowBitmap, movingPowerX - 100 + movingXDelta, movingPowerY+movingYDelta, null);
+        c.drawCircle(endPositionX, endPositionY , useingNowBitmap.getWidth() * 1.25f - 500, radiusColor);
+
+        // check collision
+        //  distance upper right corner
+        // distance upper left coprner
+        // radius = Math.sqrt(
+
+        float v = (float) Math.pow((endPositionX - (movingPowerX - 100 + movingXDelta)), 2);
+        float w = (float) Math.pow((endPositionY - (movingPowerY + movingYDelta)), 2);
+
+        // לשנות כדי שזה יכנס לתוך המעגל של הרדיוס
+        float distance = (float) Math.sqrt(v + w);
+
+
+        if(distance > useingNowBitmap.getWidth() * 1.25f){
+            movingXDelta += ratio * 20;
+            movingYDelta -= 20;
+        }
+        else
+        {
+            // שיעצור לשנייה ויעלם
+            SystemClock.sleep(200);
+            gotIntoTheRadius = true;
+        }
+    }
+
     // drawimg the bitmaps on canvas
 
     private void drawImages(Canvas c) {
 
         c.drawBitmap(bitmap, 0, 0, null);
         c.drawBitmap(bitmap2, 0, c.getHeight() - c.getHeight() / 4, null);
-        c.drawBitmap(figure1, startingPositionX, startingPositionY, null);
+        c.drawBitmap(figure1, figureIsMovingX, figureIsMovingY, null);
 
         // todo - amount of life above figure's heads
-        //c.drawText(sum, startingPositionX, startingPositionY + startingPositionY /20, null);
+        //c.drawText(sum, figureIsMovingX, figureIsMovingY + figureIsMovingY /20, null);
 
-        c.drawCircle(startingPositionX + figure1.getWidth() / 2, startingPositionY + figure1.getHeight() / 2, figure1.getWidth() * 1.25f, hilaPaint);
+        c.drawCircle(figureIsMovingX + figure1.getWidth() / 2, figureIsMovingY + figure1.getHeight() / 2, figure1.getWidth() * 1.25f, hilaPaint);
 
     }
 
@@ -211,6 +237,9 @@ public class surfaceView extends SurfaceView implements Runnable {
 
 
         setPowerX(c);
+        figureIsMovingX = bitmap.getWidth() / 20;
+        figureIsMovingY = bitmap.getHeight() - bitmap.getHeight() / 6;
+
         startingPositionX = bitmap.getWidth() / 20;
         startingPositionY = bitmap.getHeight() - bitmap.getHeight() / 6;
         bitmap = Bitmap.createScaledBitmap(bitmap, c.getWidth(), c.getHeight() - c.getHeight() / 4, false);
@@ -424,16 +453,14 @@ public class surfaceView extends SurfaceView implements Runnable {
 
 
                 // todo שהכוחות יהיו שניה בערך בנקודת הסוף, יעלמו,
-                //  והכוח החדש שיוצא יצא מההתחלה
+
                 if(done == 1)
                 {
                     done = 0;
                 }
 
-
                 float x1 = event.getX();
                 float y1 = event.getY();
-
 
 
                  // incase click is odd ->  we use Array of X
