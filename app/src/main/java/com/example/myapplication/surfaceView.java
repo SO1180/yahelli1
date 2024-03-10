@@ -1,9 +1,10 @@
 package com.example.myapplication;
 
-import static com.example.myapplication.AppConstant.AllPowers;
+import static com.example.myapplication.AppConstant.IMAGE_TOP;
+import static com.example.myapplication.AppConstant.MIDDLE_X;
 import static com.example.myapplication.AppConstant.POWERS_Y;
 import static com.example.myapplication.AppConstant.POWERX_DELTA_X;
-import static com.example.myapplication.AppConstant.POWERY_DELTA_Y;
+import static com.example.myapplication.AppConstant.canvasWidth;
 import static com.example.myapplication.AppConstant.currPowers;
 import static com.example.myapplication.AppConstant.startingPositionX;
 import static com.example.myapplication.AppConstant.startingPositionY;
@@ -49,6 +50,9 @@ public class surfaceView extends SurfaceView implements Runnable {
     Bitmap powerRock;
     Bitmap powerSnowflake;
     Bitmap powerWoodenlog;
+    Bitmap left;
+    Bitmap right;
+
     TextView textView;
     float sum = 1000;
     boolean gotIntoTheRadius = false;
@@ -101,11 +105,12 @@ public class surfaceView extends SurfaceView implements Runnable {
 
     }
 
+    float deltax = 0;
+
 
     @Override
     public void run() {
 
-        float deltax = 10;
 
         initUIElements();
 
@@ -128,18 +133,19 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                     drawImages(c);
                     startingPositionX += deltax;
-                    figureIsMovingX += deltax;
+                    figureIsMovingX = deltax;
 
-                    if (figureIsMovingX < 0 || figureIsMovingX + figure1.getWidth() > c.getWidth() - c.getWidth() / 6)
-                        deltax = -deltax;
+
+                     if (startingPositionX < 0 || startingPositionX + figure1.getWidth() > c.getWidth() - c.getWidth() / 6)
+                        deltax = 0;
 
 
                     drawPowerBar(c);
                     drawPowers(c);
                     SystemClock.sleep(200);
 
-                    float movingPowerX = AppConstant.MIDDLE_X;
-                    float movingPowerY = AppConstant.IMAGE_TOP;
+                    //float movingPowerX = AppConstant.MIDDLE_X;
+                    //float movingPowerY = AppConstant.IMAGE_TOP;
 
                     // to move the power in a way
                     // how to use the power
@@ -148,13 +154,14 @@ public class surfaceView extends SurfaceView implements Runnable {
                         Bitmap useingNowBitmap = null;
                         if (done == 1)
                         {
-                            thePowerIsMovingOnTheCanvas(useingNowBitmap, c, movingPowerX, movingPowerY);
+                            thePowerIsMovingOnTheCanvas(useingNowBitmap, c, MIDDLE_X, IMAGE_TOP);
                         }
 
                         if(done == 0) {
+                            // todo today red
                             if (!gotIntoTheRadius)
                             {
-                                thePowerIsMovingOnTheCanvas(useingNowBitmap, c, movingPowerX, movingPowerY);
+                                thePowerIsMovingOnTheCanvas(useingNowBitmap, c, MIDDLE_X, IMAGE_TOP);
                             }
 
                             movingXDelta = 0;
@@ -175,19 +182,19 @@ public class surfaceView extends SurfaceView implements Runnable {
         }
     }
 
-    private void thePowerIsMovingOnTheCanvas(Bitmap useingNowBitmap, Canvas c, float movingPowerX, float movingPowerY) {
+    private void thePowerIsMovingOnTheCanvas(Bitmap useingNowBitmap, Canvas c, float middelx, float imagetop) {
 
         useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.IMAGE_WIDTH, (int) AppConstant.IMAGE_HEIGHT, false);
-        c.drawBitmap(useingNowBitmap, movingPowerX - 100 + movingXDelta, movingPowerY+movingYDelta, null);
+        c.drawBitmap(useingNowBitmap, middelx - 100 + movingXDelta, imagetop + movingYDelta, null);
         c.drawCircle(endPositionX, endPositionY , useingNowBitmap.getWidth() * 1.25f - 500, radiusColor);
-
+// todo today red
         // check collision
         //  distance upper right corner
         // distance upper left coprner
         // radius = Math.sqrt(
 
-        float v = (float) Math.pow((endPositionX - (movingPowerX - 100 + movingXDelta)), 2);
-        float w = (float) Math.pow((endPositionY - (movingPowerY + movingYDelta)), 2);
+        float v = (float) Math.pow((endPositionX - (middelx - 100 + movingXDelta)), 2);
+        float w = (float) Math.pow((endPositionY - (imagetop + movingYDelta)), 2);
 
         // לשנות כדי שזה יכנס לתוך המעגל של הרדיוס
         float distance = (float) Math.sqrt(v + w);
@@ -211,12 +218,15 @@ public class surfaceView extends SurfaceView implements Runnable {
 
         c.drawBitmap(bitmap, 0, 0, null);
         c.drawBitmap(bitmap2, 0, c.getHeight() - c.getHeight() / 4, null);
-        c.drawBitmap(figure1, figureIsMovingX, figureIsMovingY, null);
+        c.drawBitmap(figure1, startingPositionX, figureIsMovingY, null);
 
         // todo - amount of life above figure's heads
         //c.drawText(sum, figureIsMovingX, figureIsMovingY + figureIsMovingY /20, null);
 
-        c.drawCircle(figureIsMovingX + figure1.getWidth() / 2, figureIsMovingY + figure1.getHeight() / 2, figure1.getWidth() * 1.25f, hilaPaint);
+        c.drawCircle(MIDDLE_X + figure1.getWidth() / 2 - 100, IMAGE_TOP + figure1.getHeight() / 2, figure1.getWidth() * 1.25f, hilaPaint);
+
+        c.drawBitmap(left, 50, IMAGE_TOP - 100, null);
+        c.drawBitmap(right, c.getWidth() - 200, IMAGE_TOP - 100, null);
 
     }
 
@@ -234,13 +244,13 @@ public class surfaceView extends SurfaceView implements Runnable {
         AppConstant.IMAGE_TOP = c.getHeight() - (c.getHeight() / 5) * 2;
 
         AppConstant.POWERX_DELTA_X= (c.getWidth() / 13) * 2;
-
-
+        startingPositionX = MIDDLE_X-100;
+        canvasWidth = c.getWidth();
         setPowerX(c);
         figureIsMovingX = bitmap.getWidth() / 20;
         figureIsMovingY = bitmap.getHeight() - bitmap.getHeight() / 6;
 
-        startingPositionX = bitmap.getWidth() / 20;
+        // startingPositionX = bitmap.getWidth() / 20;
         startingPositionY = bitmap.getHeight() - bitmap.getHeight() / 6;
         bitmap = Bitmap.createScaledBitmap(bitmap, c.getWidth(), c.getHeight() - c.getHeight() / 4, false);
         bitmap2 = Bitmap.createScaledBitmap(bitmap2, c.getWidth(), c.getHeight() - (int) ((c.getHeight() / 3.0) * 4), false);
@@ -249,6 +259,9 @@ public class surfaceView extends SurfaceView implements Runnable {
         figure3 = Bitmap.createScaledBitmap(figure3, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
         figure4 = Bitmap.createScaledBitmap(figure4, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
         figure5 = Bitmap.createScaledBitmap(figure5, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
+
+        left = Bitmap.createScaledBitmap(left, AppConstant.IMAGE_WIDTH - 50, AppConstant.IMAGE_HEIGHT - 100, false);
+        right = Bitmap.createScaledBitmap(right,AppConstant.IMAGE_WIDTH - 50, AppConstant.IMAGE_HEIGHT - 100, false);
 
 
         // todo timer - does not working
@@ -294,13 +307,16 @@ public class surfaceView extends SurfaceView implements Runnable {
 
     private void drawBitmaps() {
 
-        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.img);
-        bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.img_1);
+        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.canvas);
+        bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.continue_c);
         figure1 = BitmapFactory.decodeResource(getResources(), R.drawable.figure1);
         figure2 = BitmapFactory.decodeResource(getResources(), R.drawable.figure2);
         figure3 = BitmapFactory.decodeResource(getResources(), R.drawable.figure3);
         figure4 = BitmapFactory.decodeResource(getResources(), R.drawable.figure4);
         figure5 = BitmapFactory.decodeResource(getResources(), R.drawable.figure5);
+
+        left = BitmapFactory.decodeResource(getResources(), R.drawable.left);
+        right = BitmapFactory.decodeResource(getResources(), R.drawable.right);
 
         powerArrows = BitmapFactory.decodeResource(getResources(), R.drawable.arrows);
         powerRocket = BitmapFactory.decodeResource(getResources(), R.drawable.rocket);
@@ -328,6 +344,8 @@ public class surfaceView extends SurfaceView implements Runnable {
     }
 
 
+
+    // todo today
     // טיימר
     CountDownTimer timer = new CountDownTimer(60000, 1000) {
         public void onTick(long millisUntilFinished) {
@@ -449,18 +467,33 @@ public class surfaceView extends SurfaceView implements Runnable {
 
         switch (event.getAction()) {
 
+
+            // touch - start the deltaX
+            case MotionEvent.ACTION_DOWN:
+                // check if one of the buttons
+                if(handleRightLeftClick(event.getX(),event.getY(),0))
+                    return true;
+
+                // always stop deltaX
             case MotionEvent.ACTION_UP:
+                if(handleRightLeftClick(event.getX(),event.getY(),1))
+                return true;
+
+                // this way in case it is right left buttons
+                // no need for powers logic
+
+
 
 
                 // todo שהכוחות יהיו שניה בערך בנקודת הסוף, יעלמו,
 
-                if(done == 1)
-                {
+                if (done == 1) {
                     done = 0;
                 }
 
                 float x1 = event.getX();
                 float y1 = event.getY();
+
 
 
                  // incase click is odd ->  we use Array of X
@@ -519,10 +552,50 @@ public class surfaceView extends SurfaceView implements Runnable {
                     }
                 }
 
+
+
+
+
                 break;
 
         }
         return true;
+    }
+
+    private boolean handleRightLeftClick(float x1, float y1,int upDown) {
+
+        // if it is down - set deltaX
+        if(upDown == 0) // DOWN
+        {
+            if (x1 < canvasWidth - (canvasWidth - left.getWidth() - 50) && x1 > 50 && y1 > left.getHeight() && y1 < left.getHeight() + (IMAGE_TOP - 100)) {
+                    deltax =-10;
+                    return true;
+            }
+            else if (x1 > canvasWidth - 200 && x1 < canvasWidth - 200 + right.getWidth() && y1 > right.getHeight() && y1 < right.getHeight() + (IMAGE_TOP - 100)) {
+                    deltax =10;
+                  return true;
+
+                // לעצור את הדמות כשלא נוגעים במסך יותר או שכשהיא מגיעה לסוף
+            }
+        }
+        else //UP
+        {
+            if (x1 < canvasWidth - (canvasWidth - left.getWidth() - 50) && x1 > 50 && y1 > left.getHeight() && y1 < left.getHeight() + (IMAGE_TOP - 100)) {
+                deltax =0;
+                return true;
+            }
+            else if (x1 > canvasWidth - 200 && x1 < canvasWidth - 200 + right.getWidth() && y1 > right.getHeight() && y1 < right.getHeight() + (IMAGE_TOP - 100)) {
+                deltax =0;
+                return true;
+
+                // לעצור את הדמות כשלא נוגעים במסך יותר או שכשהיא מגיעה לסוף
+            }
+
+
+        }
+        return false;
+
+        // if it is up -> set Deltax to zero
     }
 
 
