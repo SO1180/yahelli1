@@ -15,6 +15,8 @@ public class AppConstant {
     public static int NUM_OF_POWERS = 4;
 
     public static float canvasWidth = 0;
+    public static float canvasHeight = 0;
+
 
     public static float POWERX_DELTA_X;
     public static float POWERY_DELTA_Y;
