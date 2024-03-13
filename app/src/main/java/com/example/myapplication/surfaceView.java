@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 public class surfaceView extends SurfaceView implements Runnable {
 
@@ -81,6 +82,8 @@ public class surfaceView extends SurfaceView implements Runnable {
 
     boolean init = true;
     private PowerBar powerBar;
+
+    private ArrayList<MovingPower> movingPowers =  new ArrayList<>();
 
     private float endPositionX=0;
     private float endPositionY=0;
@@ -155,11 +158,21 @@ public class surfaceView extends SurfaceView implements Runnable {
                     // POWERX_DELTA_X + 15, POWERS_Y + 15
 
                         Bitmap useingNowBitmap = null;
+
+                        if(movingPowers.size() > 0)
+                        {
+                            for (int i = 0; i < movingPowers.size(); i++) {
+                                movingPowers.get(i).advance(c,null);
+                            }
+                        }
+                        /*
                         if (done == 1)
                         {
                             thePowerIsMovingOnTheCanvas(useingNowBitmap, c, MIDDLE_X, IMAGE_TOP);
                         }
 
+                         */
+/*
                         if(done == 0) {
                             // todo today red
                             if (!gotIntoTheRadius)
@@ -171,6 +184,8 @@ public class surfaceView extends SurfaceView implements Runnable {
                             movingYDelta = 0;
                         }
 
+
+ */
                         // endPositionX -> all power radious
 
                 } catch (Exception e) {
@@ -189,7 +204,7 @@ public class surfaceView extends SurfaceView implements Runnable {
 
         useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.IMAGE_WIDTH, (int) AppConstant.IMAGE_HEIGHT, false);
         c.drawBitmap(useingNowBitmap, middelx - 100 + movingXDelta, imagetop + movingYDelta, null);
-        c.drawCircle(endPositionX, endPositionY , useingNowBitmap.getWidth() * 1.25f - 500, radiusColor);
+      //  c.drawCircle(endPositionX, endPositionY , useingNowBitmap.getWidth() * 1.25f - 500, radiusColor);
 // todo today red
         // check collision
         //  distance upper right corner
@@ -210,7 +225,7 @@ public class surfaceView extends SurfaceView implements Runnable {
         else
         {
             // todo שיעצור לשנייה ויעלם
-            SystemClock.sleep(200);
+            SystemClock.sleep(2000);
             gotIntoTheRadius = true;
         }
     }
@@ -266,8 +281,8 @@ public class surfaceView extends SurfaceView implements Runnable {
         figure4 = Bitmap.createScaledBitmap(figure4, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
         figure5 = Bitmap.createScaledBitmap(figure5, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT, false);
 
-        left = Bitmap.createScaledBitmap(left, AppConstant.IMAGE_WIDTH - 50, AppConstant.IMAGE_HEIGHT - 100, false);
-        right = Bitmap.createScaledBitmap(right,AppConstant.IMAGE_WIDTH - 50, AppConstant.IMAGE_HEIGHT - 100, false);
+        left = Bitmap.createScaledBitmap(left, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT - 100, false);
+        right = Bitmap.createScaledBitmap(right,AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT - 100, false);
 
 
         // todo timer - does not working
@@ -350,9 +365,7 @@ public class surfaceView extends SurfaceView implements Runnable {
     }
 
 
-
-    // todo today
-    // טיימר
+    // todo טיימר
     CountDownTimer timer = new CountDownTimer(60000, 1000) {
         public void onTick(long millisUntilFinished) {
             // Used for formatting digit to be in 2 digits only
@@ -489,7 +502,6 @@ public class surfaceView extends SurfaceView implements Runnable {
                 // no need for powers logic
 
 
-
                 // todo שהכוחות יהיו שניה בערך בנקודת הסוף, יעלמו,
 
                 if (done == 1) {
@@ -498,7 +510,6 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                 float x1 = event.getX();
                 float y1 = event.getY();
-
 
 
                  // incase click is odd ->  we use Array of X
@@ -520,9 +531,7 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                         }
                         else
-
                           Toast.makeText(getContext(), "You don't have enough powerLoad for this power", Toast.LENGTH_SHORT).show();
-
                     }
 
                 }
@@ -552,14 +561,14 @@ public class surfaceView extends SurfaceView implements Runnable {
                         // deltaX   delatY
 
                         ratio = (endPositionX-AppConstant.MIDDLE_X)/(AppConstant.POWERS_Y-endPositionY);
-                        done = 1;
 
+                        MovingPower m = new MovingPower(MIDDLE_X-100,IMAGE_TOP,currPowers[powerIndexChoice].getBitmap(),ratio,currPowers[powerIndexChoice].getDamage());
+                        movingPowers.add(m);
+
+                        done = 1;
                         powerBar.setLoad(powerBar.getLoad()-currPowers[powerIndexChoice].getReloading());
                     }
                 }
-
-
-
 
 
                 break;
@@ -567,6 +576,11 @@ public class surfaceView extends SurfaceView implements Runnable {
         }
         return true;
     }
+
+    /*
+    hi please make a logo for game named "Jesse Striker" with this text on it
+and put smiley strong woman with fun colors  figure (shooting)
+     */
 
     private boolean handleRightLeftClick(float x1, float y1,int upDown) {
 
@@ -581,7 +595,7 @@ public class surfaceView extends SurfaceView implements Runnable {
                     deltax = 10;
                   return true;
 
-                // לעצור את הדמות כשלא נוגעים במסך יותר או שכשהיא מגיעה לסוף
+                // todo לעצור את הדמות כשלא נוגעים במסך יותר או שכשהיא מגיעה לסוף
             }
         }
         else //UP
@@ -594,7 +608,7 @@ public class surfaceView extends SurfaceView implements Runnable {
                 deltax =0;
                 return true;
 
-                // לעצור את הדמות כשלא נוגעים במסך יותר או שכשהיא מגיעה לסוף
+                // todo לעצור את הדמות כשלא נוגעים במסך יותר או שכשהיא מגיעה לסוף
             }
 
 
@@ -603,6 +617,5 @@ public class surfaceView extends SurfaceView implements Runnable {
 
         // if it is up -> set Deltax to zero
     }
-
 
 }

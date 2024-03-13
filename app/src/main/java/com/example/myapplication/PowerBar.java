@@ -35,10 +35,8 @@ public class PowerBar {
                         SystemClock.sleep(AppConstant.TIME_TO_SLEEP);
                         if(load < AppConstant.MAX_NUM_OF_BARS)
                             load++;
-                        // todo have changed
-                        if(load <= 0){
-                            load = 1;
-                        }
+                        if(load < 0)
+                            load = 0;
                     }
                 }
 
