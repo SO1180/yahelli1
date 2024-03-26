@@ -14,6 +14,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.CountDownTimer;
@@ -135,7 +136,7 @@ public class surfaceView extends SurfaceView implements Runnable {
                             initGameConsts(c);
                     }
 
-                    //כאן יהיהה המשחק
+                    //כאן יהיה המשחק
 
                     drawImages(c);
                     startingPositionX += deltax;
@@ -148,6 +149,7 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                     drawPowerBar(c);
                     drawPowers(c);
+                    drawTimer(c);
                     SystemClock.sleep(200);
 
                     //float movingPowerX = AppConstant.MIDDLE_X;
@@ -183,9 +185,10 @@ public class surfaceView extends SurfaceView implements Runnable {
                             movingXDelta = 0;
                             movingYDelta = 0;
                         }
-
-
  */
+
+
+
                         // endPositionX -> all power radious
 
                 } catch (Exception e) {
@@ -198,6 +201,33 @@ public class surfaceView extends SurfaceView implements Runnable {
                 }
             }
         }
+    }
+
+    private int counterTimer = 0;
+    private int timerValue = 60;
+
+
+
+    private void drawTimer(Canvas c) {
+        Paint textTimer = new Paint();
+        textTimer.setColor(Color.BLACK);
+        textTimer.setTextSize(65);
+        c.drawText(""+timerValue,canvasWidth - canvasWidth / 7, 100, textTimer);
+
+        counterTimer++;
+        if(counterTimer%4==0)// seconds has passed
+        {
+            timerValue--;
+
+
+
+        }
+
+        // if timer ==0 GAMEOVER -> DIALOG OR IMAGE
+        // put GAMEOVER in AN IMAGE and show winner
+
+
+
     }
 
     private void thePowerIsMovingOnTheCanvas(Bitmap useingNowBitmap, Canvas c, float middelx, float imagetop) {
@@ -219,8 +249,8 @@ public class surfaceView extends SurfaceView implements Runnable {
 
 
         if(distance > useingNowBitmap.getWidth() * 1.25f){
-            movingXDelta += ratio * 20;
-            movingYDelta -= 20;
+            movingXDelta += ratio * 10;
+            movingYDelta -= 10;
         }
         else
         {
@@ -238,8 +268,10 @@ public class surfaceView extends SurfaceView implements Runnable {
         c.drawBitmap(bitmap2, 0, c.getHeight() - c.getHeight() / 4, null);
         c.drawBitmap(figure1, startingPositionX, figureIsMovingY, null);
 
-        // todo - amount of life above figure's heads
-        //c.drawText(sum, figureIsMovingX, figureIsMovingY + figureIsMovingY /20, null);
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(35);
+        c.drawText(""+sum,startingPositionX + figure1.getWidth() / 4, figureIsMovingY-20, paint);
 
         c.drawCircle(  startingPositionX + figure1.getWidth() / 2, figureIsMovingY + figure1.getHeight() / 2, figure1.getWidth() * 1.25f, hilaPaint);
 
@@ -284,21 +316,6 @@ public class surfaceView extends SurfaceView implements Runnable {
         left = Bitmap.createScaledBitmap(left, AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT - 100, false);
         right = Bitmap.createScaledBitmap(right,AppConstant.IMAGE_WIDTH, AppConstant.IMAGE_HEIGHT - 100, false);
 
-
-        // todo timer - does not working
-                     /*       CountDownTimer timer = new CountDownTimer(60000, 1000) {
-                                @Override
-                                public void onTick(long l) {
-
-                                }
-
-                                @Override
-                                public void onFinish() {
-
-                                }
-                            };
-
-                      */
 
         init = false;
 
@@ -364,23 +381,6 @@ public class surfaceView extends SurfaceView implements Runnable {
         }
     }
 
-
-    // todo טיימר
-    CountDownTimer timer = new CountDownTimer(60000, 1000) {
-        public void onTick(long millisUntilFinished) {
-            // Used for formatting digit to be in 2 digits only
-            NumberFormat f = new DecimalFormat("00");
-            long hour = (millisUntilFinished / 3600000) % 24;
-            long min = (millisUntilFinished / 60000) % 60;
-            long sec = (millisUntilFinished / 1000) % 60;
-         //   textView.setText(f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
-        }
-
-        // When the task is over it will print 00:00:00 there
-        public void onFinish() {
-      //      textView.setText("00:00:00");
-        }
-    }.start();
 
     // יצירת הפווארבר
     private void drawPowerBar(Canvas c) {
@@ -451,6 +451,16 @@ public class surfaceView extends SurfaceView implements Runnable {
 
         Powers[] currPowers = AppConstant.currPowers;
 
+        Powers pRocket = new Powers(10, 4, powerRocket);
+        currPowers[0] = pRocket;
+        Powers pSnowball = new Powers(25, 5, powerSnowball);
+        currPowers[1] = pSnowball;
+        Powers pBoomb = new Powers(15, 3, powerBoomb);
+        currPowers[2] = pBoomb;
+        Powers pArrows = new Powers(10, 10, powerArrows);
+        currPowers[3] = pArrows;
+
+        /*
         Powers pRocket = new Powers(110, 7, powerRocket);
         currPowers[0] = pRocket;
         Powers pRock = new Powers(54, 3, powerRock);
@@ -459,7 +469,7 @@ public class surfaceView extends SurfaceView implements Runnable {
         currPowers[2] = pFireball;
         Powers pArrows = new Powers(75, 3, powerArrows);
         currPowers[3] = pArrows;
-
+*/
 
         for (int i = 0; i < AppConstant.NUM_OF_POWERS; i++) {
             Paint p2 = new Paint();
@@ -492,11 +502,12 @@ public class surfaceView extends SurfaceView implements Runnable {
                 // check if one of the buttons
                 if(handleRightLeftClick(event.getX(),event.getY(),0))
                     return true;
+                break;
 
                 // always stop deltaX
             case MotionEvent.ACTION_UP:
                 if(handleRightLeftClick(event.getX(),event.getY(),1))
-                return true;
+                    return true;
 
                 // this way in case it is right left buttons
                 // no need for powers logic
@@ -531,6 +542,7 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                         }
                         else
+                            // optional shake phone...
                           Toast.makeText(getContext(), "You don't have enough powerLoad for this power", Toast.LENGTH_SHORT).show();
                     }
 
@@ -567,6 +579,7 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                         done = 1;
                         powerBar.setLoad(powerBar.getLoad()-currPowers[powerIndexChoice].getReloading());
+                        clickCounter=0;
                     }
                 }
 

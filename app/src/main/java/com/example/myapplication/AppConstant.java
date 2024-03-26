@@ -17,9 +17,7 @@ public class AppConstant {
     public static float canvasWidth = 0;
     public static float canvasHeight = 0;
 
-
     public static float POWERX_DELTA_X;
-    public static float POWERY_DELTA_Y;
 
     public static Powers[] AllPowers;
     public static Powers[] currPowers = new Powers[4];
