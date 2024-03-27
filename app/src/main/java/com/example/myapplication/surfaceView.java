@@ -17,7 +17,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -26,8 +25,6 @@ import android.view.SurfaceView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class surfaceView extends SurfaceView implements Runnable {
@@ -74,6 +71,7 @@ public class surfaceView extends SurfaceView implements Runnable {
     float figureIsMovingX;
     float figureIsMovingY;
 
+    float startingPositionXComputer;
 
     float movingXDelta = 0;
     float movingYDelta = 0;
@@ -113,7 +111,7 @@ public class surfaceView extends SurfaceView implements Runnable {
     }
 
     float deltax = 0;
-
+    float deltaxComputer = 0;
 
     @Override
     public void run() {
@@ -139,7 +137,9 @@ public class surfaceView extends SurfaceView implements Runnable {
                     //כאן יהיה המשחק
 
                     drawImages(c);
+                    drawComputerImages(c);
                     startingPositionX += deltax;
+                    startingPositionXComputer += deltaxComputer;
                     figureIsMovingX = deltax;
 
 
@@ -207,21 +207,19 @@ public class surfaceView extends SurfaceView implements Runnable {
     private int timerValue = 60;
 
 
-
+    // timer
     private void drawTimer(Canvas c) {
         Paint textTimer = new Paint();
         textTimer.setColor(Color.BLACK);
         textTimer.setTextSize(65);
-        c.drawText(""+timerValue,canvasWidth - canvasWidth / 7, 100, textTimer);
+        c.drawText(""+timerValue,canvasWidth - canvasWidth / 8, 100, textTimer);
 
         counterTimer++;
-        if(counterTimer%4==0)// seconds has passed
+        if(counterTimer%4==0 && timerValue != 0)// seconds has passed
         {
             timerValue--;
-
-
-
         }
+
 
         // if timer ==0 GAMEOVER -> DIALOG OR IMAGE
         // put GAMEOVER in AN IMAGE and show winner
@@ -230,12 +228,12 @@ public class surfaceView extends SurfaceView implements Runnable {
 
     }
 
+
     private void thePowerIsMovingOnTheCanvas(Bitmap useingNowBitmap, Canvas c, float middelx, float imagetop) {
 
         useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.IMAGE_WIDTH, (int) AppConstant.IMAGE_HEIGHT, false);
         c.drawBitmap(useingNowBitmap, middelx - 100 + movingXDelta, imagetop + movingYDelta, null);
-      //  c.drawCircle(endPositionX, endPositionY , useingNowBitmap.getWidth() * 1.25f - 500, radiusColor);
-// todo today red
+
         // check collision
         //  distance upper right corner
         // distance upper left coprner
@@ -281,6 +279,27 @@ public class surfaceView extends SurfaceView implements Runnable {
     }
 
 
+    // todo לשנות כדי שזה יעבוד על פי המחלקה שלו
+    private void drawComputerImages(Canvas c) {
+
+        //figureIsMovingY
+        c.drawBitmap(figure1, startingPositionX, canvasHeight - 8 * canvasHeight / 9, null);
+
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(35);
+        c.drawText(""+sum,startingPositionX + figure1.getWidth() / 4, (canvasHeight - 8 * canvasHeight / 9) - 20, paint);
+
+        c.drawCircle(startingPositionX + figure1.getWidth() / 2, (canvasHeight - 8 * canvasHeight / 9) + figure1.getHeight() / 2, figure1.getWidth() * 1.25f, hilaPaint);
+
+
+        if (startingPositionXComputer > 0)
+            deltaxComputer++;
+        if(startingPositionXComputer + figure1.getWidth() > c.getWidth())
+            deltaxComputer--;
+    }
+
+
     // creation of sizes
 
     private void initGameConsts(Canvas c) {
@@ -295,6 +314,8 @@ public class surfaceView extends SurfaceView implements Runnable {
 
         AppConstant.POWERX_DELTA_X= (c.getWidth() / 13) * 2;
         startingPositionX = MIDDLE_X - 100;
+        startingPositionXComputer = MIDDLE_X - 100;
+
         canvasWidth = c.getWidth();
         canvasHeight = c.getWidth();
 
