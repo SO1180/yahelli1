@@ -88,6 +88,8 @@ public class surfaceView extends SurfaceView implements Runnable {
     private float endPositionY=0;
     private float startingPositionYOfPower;
     private float startingPositionXOfPower;
+    private Player player;
+    private ComputerPlayer computerPlayer;
 
     public surfaceView(Context context) {
         super(context);
@@ -140,11 +142,18 @@ public class surfaceView extends SurfaceView implements Runnable {
                     drawComputerImages(c);
                     startingPositionX += deltax;
                     startingPositionXComputer += deltaxComputer;
+
+                    player.setPlayerDirection(deltax);
+                    computerPlayer.setPlayerDirection(deltaxComputer);
+
                     figureIsMovingX = deltax;
 
 
-                     if (startingPositionX < 0 || startingPositionX + figure1.getWidth() > c.getWidth())
+                    if (startingPositionX < 0 || startingPositionX + figure1.getWidth() > c.getWidth())
                         deltax = 0;
+                    if (startingPositionXComputer < 0 || startingPositionXComputer + figure1.getWidth() > c.getWidth())
+                        deltaxComputer = 0;
+
 
 
                     drawPowerBar(c);
@@ -152,12 +161,6 @@ public class surfaceView extends SurfaceView implements Runnable {
                     drawTimer(c);
                     SystemClock.sleep(200);
 
-                    //float movingPowerX = AppConstant.MIDDLE_X;
-                    //float movingPowerY = AppConstant.IMAGE_TOP;
-
-                    // to move the power in a way
-                    // how to use the power
-                    // POWERX_DELTA_X + 15, POWERS_Y + 15
 
                         Bitmap useingNowBitmap = null;
 
@@ -264,17 +267,12 @@ public class surfaceView extends SurfaceView implements Runnable {
 
         c.drawBitmap(bitmap, 0, 0, null);
         c.drawBitmap(bitmap2, 0, c.getHeight() - c.getHeight() / 4, null);
-        c.drawBitmap(figure1, startingPositionX, figureIsMovingY, null);
-
-        Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
-        paint.setTextSize(35);
-        c.drawText(""+sum,startingPositionX + figure1.getWidth() / 4, figureIsMovingY-20, paint);
-
-        c.drawCircle(  startingPositionX + figure1.getWidth() / 2, figureIsMovingY + figure1.getHeight() / 2, figure1.getWidth() * 1.25f, hilaPaint);
-
+        //c.drawBitmap(figure1, startingPositionX, figureIsMovingY, null);
         c.drawBitmap(left, 50, IMAGE_TOP - 100, null);
         c.drawBitmap(right, c.getWidth() - 200, IMAGE_TOP - 100, null);
+
+        player.draw(c);
+
 
     }
 
@@ -282,21 +280,21 @@ public class surfaceView extends SurfaceView implements Runnable {
     // todo לשנות כדי שזה יעבוד על פי המחלקה שלו
     private void drawComputerImages(Canvas c) {
 
-        //figureIsMovingY
-        c.drawBitmap(figure1, startingPositionX, canvasHeight - 8 * canvasHeight / 9, null);
+        // ComputerPlayer p = new ComputerPlayer(startingPositionX, canvasHeight - 8 * canvasHeight / 9, figure1, currPowers, sum, powerBar.getLoad());
+        // c.drawBitmap(figure1, startingPositionX, canvasHeight - 8 * canvasHeight / 9, null);
 
-        Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
-        paint.setTextSize(35);
-        c.drawText(""+sum,startingPositionX + figure1.getWidth() / 4, (canvasHeight - 8 * canvasHeight / 9) - 20, paint);
+        computerPlayer.draw(c);
 
-        c.drawCircle(startingPositionX + figure1.getWidth() / 2, (canvasHeight - 8 * canvasHeight / 9) + figure1.getHeight() / 2, figure1.getWidth() * 1.25f, hilaPaint);
+        // c.drawCircle(startingPositionX + figure1.getWidth() / 2, (canvasHeight - 8 * canvasHeight / 9) + figure1.getHeight() / 2, figure1.getWidth() * 1.25f, hilaPaint);
 
-
+/*
         if (startingPositionXComputer > 0)
             deltaxComputer++;
         if(startingPositionXComputer + figure1.getWidth() > c.getWidth())
             deltaxComputer--;
+            */
+
+
     }
 
 
@@ -315,6 +313,7 @@ public class surfaceView extends SurfaceView implements Runnable {
         AppConstant.POWERX_DELTA_X= (c.getWidth() / 13) * 2;
         startingPositionX = MIDDLE_X - 100;
         startingPositionXComputer = MIDDLE_X - 100;
+
 
         canvasWidth = c.getWidth();
         canvasHeight = c.getWidth();
@@ -340,6 +339,10 @@ public class surfaceView extends SurfaceView implements Runnable {
 
         init = false;
 
+        player = new Player(startingPositionX, figureIsMovingY, figure1, currPowers, sum, powerBar.getLoad(),getContext());
+        computerPlayer = new ComputerPlayer(startingPositionXComputer, canvasHeight - 8 * canvasHeight / 9, figure1, currPowers, sum, powerBar.getLoad(), getContext());
+
+
     }
 
 
@@ -355,10 +358,13 @@ public class surfaceView extends SurfaceView implements Runnable {
         radiusColor.setStyle(Paint.Style.STROKE);
         radiusColor.setStrokeWidth(5);
 
-        drawBitmaps();
+
+
 
         this.powerBar = new PowerBar();
         this.powerBar.startLoading();
+        drawBitmaps();
+
     }
 
 
@@ -623,6 +629,7 @@ and put smiley strong woman with fun colors  figure (shooting)
         {
             if (x1 < canvasWidth - (canvasWidth - left.getWidth() - 50) && x1 > 50 && y1 > IMAGE_TOP - 100 && y1 < IMAGE_TOP){//left.getHeight() + (IMAGE_TOP - 100)) {
                     deltax = -10;
+
                     return true;
             }
             else if (x1 > canvasWidth - 200 && x1 < canvasWidth - 200 + right.getWidth() && y1 > IMAGE_TOP-100 && y1 < IMAGE_TOP){//right.getHeight() + (IMAGE_TOP - 100)) {

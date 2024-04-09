@@ -1,6 +1,12 @@
 package com.example.myapplication;
 
+import static com.example.myapplication.AppConstant.startingPositionX;
+
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 public class Player extends Shape {
 
@@ -9,6 +15,7 @@ public class Player extends Shape {
     protected float lifeSum;
     protected int powerValue;
     protected int direction;
+    Paint hilaPaint ;
 
     public int getDirection() {
         return direction;
@@ -51,7 +58,7 @@ public class Player extends Shape {
         this.powerValue = powerValue;
     }
 
-    public Player() {
+    public Player(float x, float y) {
     }
 
     public Player(Bitmap bitmap, Powers[] powers, float lifeSum, int powerValue) {
@@ -61,12 +68,16 @@ public class Player extends Shape {
         this.powerValue = powerValue;
     }
 
-    public Player(float x, float y, Bitmap bitmap, Powers[] powers, float lifeSum, int powerValue) {
+    public Player(float x, float y, Bitmap bitmap, Powers[] powers, float lifeSum, int powerValue, Context context) {
         super(x, y);
         this.bitmap = bitmap;
         this.powers = powers;
         this.lifeSum = lifeSum;
         this.powerValue = powerValue;
+        this.hilaPaint = new Paint();
+        hilaPaint.setColor(context.getResources().getColor(R.color.hila));
+        hilaPaint.setStyle(Paint.Style.STROKE);
+        hilaPaint.setStrokeWidth(4);
     }
 
     public Player(Bitmap bitmap) {
@@ -85,6 +96,25 @@ public class Player extends Shape {
         this.bitmap = bitmap;
         this.powers = powers;
         this.lifeSum = lifeSum;
+    }
+
+
+    public void draw(Canvas c)
+    {
+        c.drawBitmap(bitmap, x, y, null);
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(35);
+        c.drawText(""+lifeSum,startingPositionX + bitmap.getWidth() / 4, y-20, paint);
+
+        c.drawCircle(x + bitmap.getWidth() / 2, y + bitmap.getHeight() / 2, bitmap.getWidth() * 1.25f, hilaPaint);
+
+    }
+
+
+    public void setPlayerDirection(float deltaX)
+    {
+        x+=deltaX;
     }
 
 
