@@ -59,6 +59,8 @@ public class surfaceView extends SurfaceView implements Runnable {
 
     Paint hilaPaint = new Paint();
     Paint radiusColor = new Paint();
+    Paint paint = new Paint();
+
 
     float ratio;
     float x, y;
@@ -95,7 +97,6 @@ public class surfaceView extends SurfaceView implements Runnable {
         super(context);
         this.context = context;
         holder = getHolder();
-
 
         temporaryConfiguration();
 
@@ -139,12 +140,13 @@ public class surfaceView extends SurfaceView implements Runnable {
                     //כאן יהיה המשחק
 
                     drawImages(c);
-                    drawComputerImages(c);
                     startingPositionX += deltax;
                     startingPositionXComputer += deltaxComputer;
+                    drawComputerImages(c);
+
+                    computerPlayer.movePlayer();
 
                     player.setPlayerDirection(deltax);
-                    computerPlayer.setPlayerDirection(deltaxComputer);
 
                     figureIsMovingX = deltax;
 
@@ -161,43 +163,24 @@ public class surfaceView extends SurfaceView implements Runnable {
                     drawTimer(c);
                     SystemClock.sleep(200);
 
-
-                        Bitmap useingNowBitmap = null;
-
                         if(movingPowers.size() > 0)
                         {
+                            // handle moving images
+                            thePowerIsMovingOnTheCanvas(c);
+                            /*
                             for (int i = 0; i < movingPowers.size(); i++) {
-                                movingPowers.get(i).advance(c,null);
-                            }
-                        }
-                        /*
-                        if (done == 1)
-                        {
-                            thePowerIsMovingOnTheCanvas(useingNowBitmap, c, MIDDLE_X, IMAGE_TOP);
-                        }
-
-                         */
-/*
-                        if(done == 0) {
-                            // todo today red
-                            if (!gotIntoTheRadius)
-                            {
-                                thePowerIsMovingOnTheCanvas(useingNowBitmap, c, MIDDLE_X, IMAGE_TOP);
+                                movingPowers.get(i).advance(c);
                             }
 
-                            movingXDelta = 0;
-                            movingYDelta = 0;
+                             */
                         }
- */
+                }
 
-
-
-                        // endPositionX -> all power radious
-
-                } catch (Exception e) {
+                catch (Exception e) {
                     Log.d("WHY WHY", "run: " + e.getMessage());
+                }
 
-                } finally {
+                finally {
                     if (c != null) {
                         this.getHolder().unlockCanvasAndPost(c);
                     }
@@ -227,74 +210,60 @@ public class surfaceView extends SurfaceView implements Runnable {
         // if timer ==0 GAMEOVER -> DIALOG OR IMAGE
         // put GAMEOVER in AN IMAGE and show winner
 
+        if (timerValue == 0){
+            if(player.getLifeSum() > computerPlayer.getLifeSum()){
+                Toast.makeText(getContext(), "YOU WON!! good job!", Toast.LENGTH_SHORT).show();
+            }
+            else if(player.getLifeSum() < computerPlayer.getLifeSum()){
+                Toast.makeText(getContext(), "YOU LOSE..", Toast.LENGTH_SHORT).show();
+            }
+            else
+                Toast.makeText(getContext(), "non of you won this time.. :(", Toast.LENGTH_SHORT).show();
 
+        }
 
     }
 
 
-    private void thePowerIsMovingOnTheCanvas(Bitmap useingNowBitmap, Canvas c, float middelx, float imagetop) {
+    // מחסיר כמות חיים לדמות ממול בזמן פגיעה
+    private void thePowerIsMovingOnTheCanvas(Canvas c) {
 
-        useingNowBitmap = Bitmap.createScaledBitmap(AppConstant.currPowers[powerIndexChoice].getBitmap(), (int)AppConstant.IMAGE_WIDTH, (int) AppConstant.IMAGE_HEIGHT, false);
-        c.drawBitmap(useingNowBitmap, middelx - 100 + movingXDelta, imagetop + movingYDelta, null);
+        // todo זה עובד רק אם הדיסטנס בדיוק מהאמצע!!!!(לפעמים כן ולפעמים לא)
+        // TODO וגם עוצר את כל המסך!!
 
-        // check collision
-        //  distance upper right corner
-        // distance upper left coprner
-        // radius = Math.sqrt(
-
-        float v = (float) Math.pow((endPositionX - (middelx - 100 + movingXDelta)), 2);
-        float w = (float) Math.pow((endPositionY - (imagetop + movingYDelta)), 2);
-
-        // todo לשנות כדי שזה יכנס לתוך המעגל של הרדיוס
-        float distance = ((float) Math.sqrt(v + w));
-
-
-        if(distance > useingNowBitmap.getWidth() * 1.25f){
-            movingXDelta += ratio * 10;
-            movingYDelta -= 10;
-        }
-        else
+        for(MovingPower mp :movingPowers)
         {
-            // todo שיעצור לשנייה ויעלם
-            SystemClock.sleep(2000);
-            gotIntoTheRadius = true;
+            mp.advance(c);
+            if(mp.checkCollision(computerPlayer.getX(),computerPlayer.getY(),computerPlayer.getRadius()))
+            {
+                Log.d("Collision", "thePowerIsMovingOnTheCanvas: ");
+
+                computerPlayer.setLifeSum( computerPlayer.getLifeSum() - mp.getDamage());
+                gotIntoTheRadius = true;
+                SystemClock.sleep(2000);
+                movingPowers.remove(mp);
+
+            }
         }
     }
+
 
     // drawimg the bitmaps on canvas
 
     private void drawImages(Canvas c) {
 
         c.drawBitmap(bitmap, 0, 0, null);
-        c.drawBitmap(bitmap2, 0, c.getHeight() - c.getHeight() / 4, null);
-        //c.drawBitmap(figure1, startingPositionX, figureIsMovingY, null);
+        c.drawBitmap(bitmap2, 0, c.getHeight() - canvasHeight /4, null);
         c.drawBitmap(left, 50, IMAGE_TOP - 100, null);
         c.drawBitmap(right, c.getWidth() - 200, IMAGE_TOP - 100, null);
 
         player.draw(c);
 
-
     }
 
-
-    // todo לשנות כדי שזה יעבוד על פי המחלקה שלו
     private void drawComputerImages(Canvas c) {
 
-        // ComputerPlayer p = new ComputerPlayer(startingPositionX, canvasHeight - 8 * canvasHeight / 9, figure1, currPowers, sum, powerBar.getLoad());
-        // c.drawBitmap(figure1, startingPositionX, canvasHeight - 8 * canvasHeight / 9, null);
-
         computerPlayer.draw(c);
-
-        // c.drawCircle(startingPositionX + figure1.getWidth() / 2, (canvasHeight - 8 * canvasHeight / 9) + figure1.getHeight() / 2, figure1.getWidth() * 1.25f, hilaPaint);
-
-/*
-        if (startingPositionXComputer > 0)
-            deltaxComputer++;
-        if(startingPositionXComputer + figure1.getWidth() > c.getWidth())
-            deltaxComputer--;
-            */
-
-
     }
 
 
@@ -340,7 +309,8 @@ public class surfaceView extends SurfaceView implements Runnable {
         init = false;
 
         player = new Player(startingPositionX, figureIsMovingY, figure1, currPowers, sum, powerBar.getLoad(),getContext());
-        computerPlayer = new ComputerPlayer(startingPositionXComputer, canvasHeight - 8 * canvasHeight / 9, figure1, currPowers, sum, powerBar.getLoad(), getContext());
+        computerPlayer = new ComputerPlayer(MIDDLE_X-100, canvasHeight - 8 * canvasHeight / 9, figure1, currPowers, sum, powerBar.getLoad(), getContext());
+
 
 
     }
@@ -358,7 +328,8 @@ public class surfaceView extends SurfaceView implements Runnable {
         radiusColor.setStyle(Paint.Style.STROKE);
         radiusColor.setStrokeWidth(5);
 
-
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(35);
 
 
         this.powerBar = new PowerBar();
@@ -540,8 +511,6 @@ public class surfaceView extends SurfaceView implements Runnable {
                 // no need for powers logic
 
 
-                // todo שהכוחות יהיו שניה בערך בנקודת הסוף, יעלמו,
-
                 if (done == 1) {
                     done = 0;
                 }
@@ -603,6 +572,7 @@ public class surfaceView extends SurfaceView implements Runnable {
 
                         MovingPower m = new MovingPower(MIDDLE_X-100,IMAGE_TOP,currPowers[powerIndexChoice].getBitmap(),ratio,currPowers[powerIndexChoice].getDamage());
                         movingPowers.add(m);
+
 
                         done = 1;
                         powerBar.setLoad(powerBar.getLoad()-currPowers[powerIndexChoice].getReloading());

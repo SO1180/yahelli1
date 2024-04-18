@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import static com.example.myapplication.AppConstant.canvasHeight;
 import static com.example.myapplication.AppConstant.startingPositionX;
 
 import android.content.Context;
@@ -16,6 +17,8 @@ public class Player extends Shape {
     protected int powerValue;
     protected int direction;
     Paint hilaPaint ;
+    Paint paint;
+    protected int deltaX;
 
     public int getDirection() {
         return direction;
@@ -59,6 +62,7 @@ public class Player extends Shape {
     }
 
     public Player(float x, float y) {
+        super(x,y);
     }
 
     public Player(Bitmap bitmap, Powers[] powers, float lifeSum, int powerValue) {
@@ -105,16 +109,19 @@ public class Player extends Shape {
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setTextSize(35);
-        c.drawText(""+lifeSum,startingPositionX + bitmap.getWidth() / 4, y-20, paint);
 
-        c.drawCircle(x + bitmap.getWidth() / 2, y + bitmap.getHeight() / 2, bitmap.getWidth() * 1.25f, hilaPaint);
-
+        c.drawText(""+lifeSum,x + bitmap.getWidth() / 4, y-20, paint);
+        c.drawCircle(x + bitmap.getWidth() / 2,  y + bitmap.getHeight() / 2, bitmap.getWidth() * 1.25f, hilaPaint);
     }
 
 
     public void setPlayerDirection(float deltaX)
     {
         x+=deltaX;
+    }
+
+    public float getRadius() {
+        return bitmap.getWidth() * 1.25f;
     }
 
 
