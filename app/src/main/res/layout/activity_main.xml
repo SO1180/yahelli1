@@ -8,10 +8,10 @@
     android:background="@drawable/main"
     tools:context=".MainActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="380dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="20dp"
-        android:layout_constrai
+    //androidx.constraintlayout.widget.ConstraintLayout
+      // android:layout_width="380dp"
+        //android:layout_height="0dp"
+       // android:layout_marginBottom="20dp"
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
