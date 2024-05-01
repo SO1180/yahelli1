@@ -11,8 +11,11 @@
         <entry key="..\:/Users/Owner/AndroidStudioProjects/yahelli1/app/src/main/res/drawable/ic_baseline_text_format_24.xml" value="0.1545" />
         <entry key="..\:/Users/Owner/AndroidStudioProjects/yahelli1/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2595" />
         <entry key="..\:/Users/Owner/AndroidStudioProjects/yahelli1/app/src/main/res/drawable/tab_bkg.xml" value="0.1545" />
+        <entry key="..\:/Users/Owner/AndroidStudioProjects/yahelli1/app/src/main/res/drawable/viewpager_bkg.xml" value="0.1" />
         <entry key="..\:/Users/Owner/AndroidStudioProjects/yahelli1/app/src/main/res/drawable/viewpaper_bkg.xml" value="0.1545" />
-        <entry key="..\:/Users/Owner/AndroidStudioProjects/yahelli1/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/Owner/AndroidStudioProjects/yahelli1/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/Owner/AndroidStudioProjects/yahelli1/app/src/main/res/layout/fragment_login_tab.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Owner/AndroidStudioProjects/yahelli1/app/src/main/res/layout/fragment_signup_tab.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>
