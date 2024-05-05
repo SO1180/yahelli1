@@ -14,8 +14,10 @@
         <entry key="..\:/Users/Owner/AndroidStudioProjects/yahelli1/app/src/main/res/drawable/viewpager_bkg.xml" value="0.1" />
         <entry key="..\:/Users/Owner/AndroidStudioProjects/yahelli1/app/src/main/res/drawable/viewpaper_bkg.xml" value="0.1545" />
         <entry key="..\:/Users/Owner/AndroidStudioProjects/yahelli1/app/src/main/res/layout/activity_main.xml" value="0.2" />
-        <entry key="..\:/Users/Owner/AndroidStudioProjects/yahelli1/app/src/main/res/layout/fragment_login_tab.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/Owner/AndroidStudioProjects/yahelli1/app/src/main/res/layout/fragment_signup_tab.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Owner/AndroidStudioProjects/yahelli1/app/src/main/res/layout/activity_main2.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Owner/AndroidStudioProjects/yahelli1/app/src/main/res/layout/fragment_login_tab.xml" value="0.1" />
+        <entry key="..\:/Users/Owner/AndroidStudioProjects/yahelli1/app/src/main/res/layout/fragment_signup_tab.xml" value="0.1" />
+        <entry key="..\:/Users/Owner/AndroidStudioProjects/yahelli1/app/src/main/res/layout/start_activity.xml" value="0.2" />
       </map>
     </option>
   </component>
