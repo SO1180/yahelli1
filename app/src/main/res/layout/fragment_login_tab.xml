@@ -17,14 +17,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:padding="20dp">
 
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="200dp"
-                android:src="@drawable/login"/>
+                android:layout_height="150dp"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/login" />
 
             <EditText
                 android:layout_width="300dp"
@@ -52,25 +53,12 @@
                 android:drawablePadding="8dp"
                 android:background="@drawable/edittext_bkg"/>
 
-            <EditText
-                android:layout_width="300dp"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                android:id="@+id/login_confirm"
-                android:layout_marginTop="20dp"
-                android:padding="8dp"
-                android:hint="Confirm Password"
-                android:inputType="textPassword"
-                android:drawableLeft="@drawable/ic_baseline_text_format_24"
-                android:drawablePadding="8dp"
-                android:background="@drawable/edittext_bkg"/>
-
             <Button
                 android:layout_width="300dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:id="@+id/login_buttom"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:textSize="18sp"
                 android:text="Log In"
                 app:cornerRadius="30dp"/>

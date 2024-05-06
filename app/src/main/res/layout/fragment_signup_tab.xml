@@ -17,14 +17,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:padding="20dp">
 
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:src="@drawable/peopleforsignup"/>
+                android:layout_height="115dp"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/peopleicons" />
 
             <EditText
                 android:layout_width="300dp"
@@ -70,7 +71,8 @@
                 android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:id="@+id/signup_buttom"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
+                android:textSize="18sp"
                 android:text="Sign Up"
                 app:cornerRadius="30dp"/>
 
