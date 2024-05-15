@@ -12,21 +12,21 @@ public class ProfileActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager2 viewPager2;
-    private ViewPagerAdapter adapter;
+    private ViewPagerAdapterProfile adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_activity);
 
-        tabLayout = findViewById(R.id.tab_layout);
-        viewPager2 = findViewById(R.id.view_pager);
+        tabLayout = findViewById(R.id.tab_layout2);
+        viewPager2 = findViewById(R.id.view_pager2);
 
         tabLayout.addTab(tabLayout.newTab().setText("My Profile"));
         tabLayout.addTab(tabLayout.newTab().setText("Financial Means"));
 
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        adapter = new ViewPagerAdapter(fragmentManager, getLifecycle());
+        adapter = new ViewPagerAdapterProfile(fragmentManager, getLifecycle());
         viewPager2.setAdapter(adapter);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
