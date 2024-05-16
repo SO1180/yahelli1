@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 public class MyProfileFragment extends Fragment {
 
     private View view;
+    //private ImageView imageView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -25,5 +26,7 @@ public class MyProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //imageView = view.findViewById(R.id.)
     }
 }

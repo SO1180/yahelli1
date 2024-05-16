@@ -14,9 +14,9 @@ public class ViewPagerAdapterProfile extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         if(position == 1){
-            return new MyProfileFragment();
+            return new FinancialMeansFragment();
         }
-        return new FinancialMeansFragment();
+        return new MyProfileFragment();
     }
 
     @Override
