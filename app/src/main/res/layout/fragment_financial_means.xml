@@ -23,7 +23,7 @@
                 android:id="@+id/financialmeans_level"
                 android:layout_marginTop="30dp"
                 android:padding="8dp"
-                android:hint="level -"
+                android:text="level - 1"
                 android:textSize="25dp"
                 app:fontFamily="sans-serif-black"
                 android:drawablePadding="8dp"/>
@@ -36,7 +36,7 @@
                 android:id="@+id/financialmeans_coins"
                 android:layout_marginTop="0dp"
                 android:padding="8dp"
-                android:hint="coins - "
+                android:text="coins - 0"
                 android:textSize="25dp"
                 app:fontFamily="sans-serif-black"
                 android:drawablePadding="8dp" />
@@ -57,14 +57,20 @@
                     android:layout_height="70dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:src="@drawable/rock" />
+                    android:src="@drawable/arrows" />
 
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="70dp"
                     android:layout_weight="1"
+                    android:src="@drawable/boomb"
+                    android:gravity="center"/>
 
-                    android:src="@drawable/rock"
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="70dp"
+                    android:src="@drawable/fireball"
+                    android:layout_weight="1"
                     android:gravity="center"/>
 
                 <ImageView
@@ -72,14 +78,6 @@
                     android:layout_height="70dp"
                     android:src="@drawable/rock"
                     android:layout_weight="1"
-                    android:gravity="center"/>
-
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/rock"
-                    android:layout_weight="1"
-
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -106,7 +104,6 @@
                     android:layout_height="70dp"
                     android:src="@drawable/snowball"
                     android:layout_weight="1"
-
                     android:gravity="center"/>
 
                 <ImageView
@@ -114,7 +111,6 @@
                     android:layout_height="70dp"
                     android:src="@drawable/woodenlog"
                     android:layout_weight="1"
-
                     android:gravity="center"/>
 
     </LinearLayout>
@@ -131,40 +127,37 @@
 
 
     <TextView
-                    android:drawableLeft="@drawable/ic_baseline_lock_24"
-                    android:text="1000"
-                    android:textSize="20dp"
-                    android:background="#425495"
-                    android:textColor="#000000"
-                    android:gravity="center"
+        android:drawableLeft="@drawable/ic_baseline_lock_24"
+        android:text="-700-"
+        android:textSize="20dp"
+        android:background="#425495"
+        android:textColor="#000000"
+        android:gravity="center"
         android:layout_width="0dp"
         android:layout_height="30dp"
-
         android:layout_weight="1"
         />
 
                 <TextView
                     android:drawableLeft="@drawable/ic_baseline_lock_24"
-                    android:text="2"
+                    android:text="-650-"
                     android:textSize="20dp"
                     android:background="#425495"
                     android:textColor="#000000"
                     android:gravity="center"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
-
                     android:layout_weight="1"/>
 
                 <TextView
                     android:drawableLeft="@drawable/ic_baseline_lock_24"
-                    android:text="700"
+                    android:text="-800-"
                     android:textSize="20dp"
                     android:background="#425495"
                     android:textColor="#000000"
                     android:gravity="center"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
-
                     android:layout_weight="1"/>
 
     </LinearLayout>
@@ -191,7 +184,7 @@
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="70dp"
-                    android:src="@drawable/rock"
+                    android:src="@drawable/rocket"
                     android:layout_weight="1"
                     android:gravity="center"/>
 
@@ -205,26 +198,24 @@
         android:orientation="horizontal">
                 <TextView
                     android:drawableLeft="@drawable/ic_baseline_lock_24"
-                    android:text="1000"
+                    android:text="-850-"
                     android:textSize="20dp"
                     android:background="#425495"
                     android:textColor="#000000"
                     android:gravity="center"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
-
                     android:layout_weight="1"/>
 
                 <TextView
                     android:drawableLeft="@drawable/ic_baseline_lock_24"
-                    android:text="2"
+                    android:text="-650-"
                     android:textSize="20dp"
                     android:background="#425495"
                     android:textColor="#000000"
                     android:gravity="center"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
-
                     android:layout_weight="1"/>
 
     </LinearLayout>

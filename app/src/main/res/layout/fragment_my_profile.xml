@@ -25,29 +25,35 @@
                 android:layout_width="100dp"
                 android:layout_height="150dp"
                 android:src="@drawable/figure1"
+                android:id="@+id/myprofile_figure"
               />
 
 
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="70dp"
-                android:src="@drawable/emptystar" />
+                android:src="@drawable/emptystar"
+                android:id="@+id/emptystar1"/>
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="70dp"
-                android:src="@drawable/emptystar" />
+                android:src="@drawable/emptystar"
+                android:id="@+id/emptystar2"/>
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="70dp"
-                android:src="@drawable/emptystar" />
+                android:src="@drawable/emptystar"
+                android:id="@+id/emptystar3"/>
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="70dp"
-                android:src="@drawable/emptystar" />
+                android:src="@drawable/emptystar"
+                android:id="@+id/emptystar4"/>
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="70dp"
-                android:src="@drawable/emptystar" />
+                android:src="@drawable/emptystar"
+                android:id="@+id/emptystar5"/>
         </LinearLayout>
 
             <TextView
