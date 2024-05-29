@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,6 +47,26 @@ public class MyProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         liseOfStarViews();
+
+        Button b = view.findViewById(R.id.myprofile_botton);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(),MainActivity.class);
+                startActivity(i);
+            }
+        });
+
+        // load the current powers with the latest powers saved...
+        /*
+        // for the moment
+        AppConstant.currPowers[0] = new Powers(10, 4, powerRocket);
+        AppConstant.currPowers[1] = new Powers(25, 5, powerSnowball);
+        AppConstant.currPowers[2] = new Powers(15, 3, powerBoomb);
+        AppConstant.currPowers[3] = new Powers(10, 10, powerArrows);
+
+
+         */
     }
 
 
@@ -102,7 +124,7 @@ public class MyProfileFragment extends Fragment {
 
         TextView coinsP = view.findViewById(R.id.myprofile_coins);
         TextView coinsF = view.findViewById(R.id.financialmeans_coins);
-
+/*
         if(won)
             coinsP += 150;
             coinsF += 150;
@@ -112,6 +134,8 @@ public class MyProfileFragment extends Fragment {
             coinsF += 70;
         if(lost)
             removeStar();
+
+ */
     }
 
 

@@ -102,15 +102,23 @@ public class surfaceView extends SurfaceView implements Runnable {
 
     }
 
+
+    // level
+    // coins
+    // powers
+    // rating
+
     // רק לבנתיים מערך של כוחות
 
     private void temporaryConfiguration() {
 
-        AppConstant.currPowers[0] = new Powers(10, 4, powerRocket);
-        AppConstant.currPowers[1] = new Powers(25, 5, powerSnowball);
-        AppConstant.currPowers[2] = new Powers(15, 3, powerBoomb);
-        AppConstant.currPowers[3] = new Powers(10, 10, powerArrows);
+        if( AppConstant.currPowers[0]==null) {
 
+            AppConstant.currPowers[0] = new Powers(10, 4, powerRocket);
+            AppConstant.currPowers[1] = new Powers(25, 5, powerSnowball);
+            AppConstant.currPowers[2] = new Powers(15, 3, powerBoomb);
+            AppConstant.currPowers[3] = new Powers(10, 10, powerArrows);
+        }
     }
 
     float deltax = 0;
@@ -448,7 +456,7 @@ public class surfaceView extends SurfaceView implements Runnable {
 
 
         Powers[] currPowers = AppConstant.currPowers;
-
+/*
         Powers pRocket = new Powers(10, 4, powerRocket);
         currPowers[0] = pRocket;
         Powers pSnowball = new Powers(25, 5, powerSnowball);
@@ -457,6 +465,8 @@ public class surfaceView extends SurfaceView implements Runnable {
         currPowers[2] = pBoomb;
         Powers pArrows = new Powers(10, 10, powerArrows);
         currPowers[3] = pArrows;
+
+ */
 
         /*
         Powers pRocket = new Powers(110, 7, powerRocket);
