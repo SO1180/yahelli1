@@ -18,6 +18,8 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_activity);
 
+
+
         tabLayout = findViewById(R.id.tab_layout2);
         viewPager2 = findViewById(R.id.view_pager2);
 

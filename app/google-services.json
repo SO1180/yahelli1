@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "456486423689",
+    "project_id": "shira-95174",
+    "storage_bucket": "shira-95174.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:456486423689:android:c940f64f350766a0c00a58",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvsqQQrS7rPLD-8d2_EeYj8zjXSZVqaxg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

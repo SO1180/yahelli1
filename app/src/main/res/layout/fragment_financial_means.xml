@@ -112,6 +112,7 @@
                     android:layout_height="70dp"
                     android:src="@drawable/snowball"
                     android:layout_weight="1"
+                    android:id="@+id/ivLevel3"
                     android:gravity="center"/>
 
                 <ImageView
@@ -119,6 +120,7 @@
                     android:layout_height="70dp"
                     android:src="@drawable/woodenlog"
                     android:layout_weight="1"
+                    android:id="@+id/ivLevel4"
                     android:gravity="center"/>
 
     </LinearLayout>
@@ -192,6 +194,8 @@
                     android:layout_height="70dp"
                     android:src="@drawable/snowflake"
                     android:layout_weight="1"
+                    android:id="@+id/ivLevel5"
+
                     android:gravity="center"/>
 
                 <ImageView
@@ -199,6 +203,8 @@
                     android:layout_height="70dp"
                     android:src="@drawable/rocket"
                     android:layout_weight="1"
+                    android:id="@+id/ivLevel5.5"
+
                     android:gravity="center"/>
 
     </LinearLayout>
